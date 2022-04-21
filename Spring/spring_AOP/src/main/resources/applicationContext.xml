@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/aop https://www.springframework.org/schema/aop/spring-aop.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+    <context:component-scan base-package="com.knight"></context:component-scan>
+
+    <!-- 开启基于注解的aop功能，需要aop名称空间 -->
+    <aop:aspectj-autoproxy></aop:aspectj-autoproxy>
+
+
+    <!-- 加载外部配置文件。固定写法classpath:表示引用类路径下的文件 -->
+    <context:property-placeholder location="classpath:dbconfig.properties"/>
+
+    <!--  配置数据源-->
+    <bean id="pooledDataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+        <property name="user" value="${jdbc.user}"></property>
+        <property name="password" value="${jdbc.password}"></property>
+        <property name="jdbcUrl" value="${jdbc.jdbcUrl}"></property>
+        <property name="driverClass" value="${jdbc.driverClass}"></property>
+    </bean>
+
+    <!-- 配置JdbcTemplate -->
+    <bean class="org.springframework.jdbc.core.JdbcTemplate">
+        <property name="dataSource" ref="pooledDataSource"></property>
+    </bean>
+
+    <!-- 事务控制 -->
+    <!--1:配置事务管理器（切面）让其进行事务控制-->
+    <bean id="tm" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <!-- 控制住数据源 -->
+        <property name="dataSource" ref="pooledDataSource"></property>
+    </bean>
+    <!--2:开启基于注解的事务控制模式；依赖tx名称空间  -->
+    <tx:annotation-driven transaction-manager="tm"/>
+    <!--3:给事务方法加注解@Transactional  -->
+
+</beans>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!-- 通过给bean上添加某些注解，可以快速将bean加入到ioc容器中
+            Spring有4个注解：
+                1、@Controller：控制器层，给控制器（Servlet包下的）组件添加这个注解
+                2、@Service：业务逻辑层注解
+                3、@Repository：给数据层（持久化层，Dao层）的组件添加这个注解
+                4、@Component：给不属于以上几层的组件添加这个注解
+
+
+
+            使用注解步骤：
+                1、给要添加的组件上标示4个注解中的任何一个
+                2、告诉Spring，自动扫描加了注解的组件；依赖context名称空间
+    -->
+
+    <!-- context:component-scan 自动扫描组件
+            base-package：自动扫描的基础包路径-->
+    <context:component-scan base-package="com.knight">
+        <!--    <context:component-scan base-package="com.knight" use-default-filters="false">-->
+        <!--        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>-->
+        <!--        <context:include-filter type="assignable" expression="com.knight.servlet.BookServlet"/>-->
+    </context:component-scan>
+
+</beans>
