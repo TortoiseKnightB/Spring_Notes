@@ -37,4 +37,24 @@
     <tx:annotation-driven transaction-manager="tm"/>
     <!--3:给事务方法加注解@Transactional  -->
 
+
+
+<!--    事务xml配置-->
+<!--    <aop:config>-->
+<!--        <aop:pointcut id="txPoint" expression="execution(* com.knight.impl.*.*(..))"/>-->
+<!--        &lt;!&ndash; 指向事务管理器的配置 &ndash;&gt;-->
+<!--        <aop:advisor advice-ref="myAdvice" pointcut-ref="txPoint"/>-->
+<!--    </aop:config>-->
+
+<!--    &lt;!&ndash; 配置事务管理器 &ndash;&gt;-->
+<!--    <tx:advice id="myAdvice" transaction-manager="tm">-->
+<!--        &lt;!&ndash; 配置事务属性 &ndash;&gt;-->
+<!--        <tx:attributes>-->
+<!--            &lt;!&ndash; 指明哪些方法是事务方法 &ndash;&gt;-->
+<!--            <tx:method name="*"/>-->
+<!--            <tx:method name="checkout" propagation="REQUIRED" timeout="-1"/>-->
+<!--            <tx:method name="add" read-only="true"/>-->
+<!--        </tx:attributes>-->
+<!--    </tx:advice>-->
+
 </beans>

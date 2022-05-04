@@ -353,3 +353,133 @@ Calculator bean = ioc.getBean(Calculator.class);
         // jdbc 减顾客余额操作
     }
 ```
+
+- 事务细节：（自己去看`@Transactional`源码）
+  - 异常分类：
+    - 运行时异常（非检查异常）：可以不用处理；默认都回滚；`noRollbackFor`可以指定其不回滚
+    - 编译时异常（检查异常）：用try-catch或throws处理；默认不回滚；`rollbackFor`可以指定其回滚
+  - 隔离级别：（自己去复习MySQL数据库）
+  - 传播行为：（事务中嵌套事务怎么处理，spring中有七种传播行为）
+    - REQUIRED：当前事务和外层大事务共用一个事务，将之前事务的connection传递给这个方法使用
+    - REQUIRED_NEW：当前事务总是一个新的事务，如果已经有事务，会将之前事务挂起，直接使用新的connection
+    - 如果是REQUIRED，事务的属性（timeout等）都是继承外层大事务的；而REQUIRES_NEW可以对自身进行调整
+  - 本类方法的嵌套调用就只是一个事务
+    - 相当于本类this调用方法
+    - 应该用自动装配的代理对象调用
+
+```java
+// 嵌套事务方法
+@Transactional
+public void mulTx(){
+
+    // 事务A-REQUIRED，跟外层事务mulTx串在一起
+    t.txA();
+
+    // 事务B-REQUIRED_NEW，新开事务，执行期间将外层事务mulTx挂起
+    t.txB();
+
+    int i = 10 / 0;    // mulTx、txA回滚，txB不回滚
+}
+
+public class T {
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void txA(){
+    }
+
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public void txB(){
+    }
+}
+```
+
+```java
+@Transactional
+public void mulTx(){
+    // REQUIRED
+    t.txA(){
+        // REQUIRES_NEW
+        t.txB(){}
+        // REQUIRED
+        t.txC(){}
+    }
+
+    // REQUIRES_NEW
+    t.txD(){
+        // REQUIRED
+        t.txE(){
+            // REQUIRES_NEW
+            t.txF(){}
+        }
+        // REQUIRES_NEW
+        t.txG(){}
+    }
+
+    int i = 10 / 0;
+    // txB、txD、txE、txF、txG事务执行成功
+}
+```
+
+```java
+@Transactional
+public void mulTx(){
+    // REQUIRED
+    t.txA(){
+        // REQUIRES_NEW
+        t.txB(){}
+        // REQUIRED
+        t.txC(){}
+    }
+
+    // REQUIRES_NEW
+    t.txD(){
+
+        // REQUIRES_NEW
+        t.txH(){}
+
+        // REQUIRED
+        t.txI(){}
+
+        // REQUIRED
+        t.txE(){
+            // REQUIRES_NEW
+            t.txF(){
+                int i = 10 / 0; // F崩=>E崩=>G不会执行、D崩、I崩=>mulTx崩、A崩、C崩
+            }
+        }
+
+        // REQUIRES_NEW
+        t.txG(){}
+    }
+
+    // txB、txH事务执行成功，已经执行的REQUIRES_NEW都会成功
+}
+```
+
+- XML 事务配置样例
+  - 重要的事务用xml配置
+
+```xml
+    <!--配置事务管理器（切面）让其进行事务控制-->
+    <bean id="tm" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <!-- 控制住数据源 -->
+        <property name="dataSource" ref="pooledDataSource"></property>
+    </bean>
+
+    <aop:config>
+        <aop:pointcut id="txPoint" expression="execution(* com.knight.impl.*.*(..))"/>
+        <!-- 指向事务管理器的配置 -->
+        <aop:advisor advice-ref="myAdvice" pointcut-ref="txPoint"/>
+    </aop:config>
+
+    <!-- 配置事务管理器 -->
+    <tx:advice id="myAdvice" transaction-manager="tm">
+        <!-- 配置事务属性 -->
+        <tx:attributes>
+            <!-- 指明哪些方法是事务方法 -->
+            <tx:method name="*"/>
+            <tx:method name="checkout" propagation="REQUIRED" timeout="-1"/>
+            <tx:method name="add" read-only="true"/>
+        </tx:attributes>
+    </tx:advice>
+```
