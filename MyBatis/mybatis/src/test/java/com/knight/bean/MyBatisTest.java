@@ -28,14 +28,18 @@ public class MyBatisTest {
         InputStream inputStream = Resources.getResourceAsStream(resource);
         SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
 
+        Employee employee;
         // 2、获取和数据库的一次会话；getConnection()；
         SqlSession session = sqlSessionFactory.openSession();
-
-        //3、使用SqlSession操作数据库，获取到dao接口的实现
-        EmployeeDao employeeDao = session.getMapper(EmployeeDao.class);
-
-        //4、调用之前的方法；
-        Employee employee = employeeDao.getEmpById(1);
+        try {
+            //3、使用SqlSession操作数据库，获取到dao接口的实现
+            EmployeeDao employeeDao = session.getMapper(EmployeeDao.class);
+            //4、调用之前的方法；
+            employee = employeeDao.getEmpById(1);
+        } finally {
+            session.close();
+        }
         System.out.println(employee);
     }
+
 }

@@ -11,9 +11,33 @@
         resultType:指定方法运行后的返回值类型；（查询操作必须指定的）
         #{属性名}：代表取出传递过来的某个参数的值
     -->
+    <!-- Employee getEmpById(Integer id); -->
     <select id="getEmpById" resultType="com.knight.bean.Employee">
         select *
         from t_employee
         where id = #{id}
     </select>
+
+    <!-- int updateEmployee(Employee employee); -->
+    <!-- 增删改不用写返回值类型，结果表示影响多少行 -->
+    <update id="updateEmployee">
+        update t_employee
+        set empname = #{empName},
+            gender  = #{gender},
+            email   = #{email}
+        where id = #{id}
+    </update>
+
+    <!-- int deleteEmployee(Integer id); -->
+    <delete id="deleteEmployee">
+        delete
+        from t_employee
+        where id = #{id}
+    </delete>
+
+    <!-- int insertEmployee(Employee employee); -->
+    <insert id="insertEmployee">
+        insert into t_employee(empname, gender, email)
+        values (#{empName}, #{gender}, #{email})
+    </insert>
 </mapper>
