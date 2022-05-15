@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.knight.dao.CatDao">
+
+    <resultMap id="mycat" type="com.knight.bean.Cat">
+        <!--
+            主键列
+            column：指定数据库中哪一列是主键列
+            property：指定Cat中哪个字段封装id这一列数据
+        -->
+        <id property="catId" column="id"/>
+        <!-- 普通列 -->
+        <result property="name" column="cName"/>
+        <result property="gender" column="c_gender"/>
+        <result property="age" column="cAge"/>
+    </resultMap>
+
+    <!-- Cat getCatById(Integer id); -->
+    <select id="getCatById" resultMap="mycat">
+        select *
+        from t_cat
+        where id = #{id}
+    </select>
+
+
+</mapper>

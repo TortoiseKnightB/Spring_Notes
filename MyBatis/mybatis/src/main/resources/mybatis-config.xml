@@ -50,6 +50,7 @@
         -->
 <!--        <mapper resource="mapper/EmployeeMapper.xml"/>-->
         <mapper resource="mapper/EmployeeMapper2.xml"/>
+        <mapper resource="mapper/CatMapper.xml"/>
     </mappers>
 
 </configuration>

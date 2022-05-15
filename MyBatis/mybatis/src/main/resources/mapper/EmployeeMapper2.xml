@@ -5,23 +5,6 @@
 
 <mapper namespace="com.knight.dao.EmployeeDao">
 
-
-    <!-- int updateEmployee(Employee employee); -->
-    <update id="updateEmployee">
-        update t_employee
-        set empname = #{empName},
-            gender  = #{gender},
-            email   = #{email}
-        where id = #{id}
-    </update>
-
-    <!-- int deleteEmployee(Integer id); -->
-    <delete id="deleteEmployee">
-        delete
-        from t_employee
-        where id = #{id}
-    </delete>
-
     <!-- int insertEmployee(Employee employee); -->
     <!--
         自动的将自增的id赋值给传入的employee对象的id字段
@@ -57,6 +40,28 @@
         from ${table}
         where id = #{id}
           and empname = #{empName}
+    </select>
+
+    <!-- List<Employee> getAllEmps(); -->
+    <!--
+        查询返回集合,resultType为集合元素类型
+    -->
+    <select id="getAllEmps" resultType="com.knight.bean.Employee">
+        select *
+        from t_employee
+    </select>
+
+    <!-- Map<String, Object> getEmpByIdReturnMap(Integer id); -->
+    <select id="getEmpByIdReturnMap" resultType="map">
+        select *
+        from t_employee
+        where id = #{id}
+    </select>
+
+    <!-- Map<String, Object> getAllEmpReturnMap(); -->
+    <select id="getAllEmpReturnMap" resultType="com.knight.bean.Employee">
+        select *
+        from t_employee
     </select>
 
 </mapper>
