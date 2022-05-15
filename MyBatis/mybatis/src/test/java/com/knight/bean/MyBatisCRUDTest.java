@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 import java.io.InputStream;
 
+@DisplayName("2、MyBatis增删查改测试")
 public class MyBatisCRUDTest {
 
     SqlSessionFactory sqlSessionFactory;
@@ -66,7 +67,7 @@ public class MyBatisCRUDTest {
     @DisplayName("update测试/自动提交")
     @Test
     void test3() {
-        Employee employee = new Employee(1, "项羽", "xiangyu@qq.com", 1);
+        Employee employee = new Employee(1, "项羽", "xiangyu@qq.com", 0);
         // 2、获取和数据库的一次会话；getConnection()；
         // 设置的会话为自动提交
         SqlSession session = sqlSessionFactory.openSession(true);
@@ -90,7 +91,7 @@ public class MyBatisCRUDTest {
             //3、使用SqlSession操作数据库，获取到dao接口的实现
             EmployeeDao employeeDao = session.getMapper(EmployeeDao.class);
             //4、调用之前的方法；
-            int res = employeeDao.deleteEmployee(8);
+            int res = employeeDao.deleteEmployee(9);
             System.out.println(res);
         } finally {
             // 手动提交

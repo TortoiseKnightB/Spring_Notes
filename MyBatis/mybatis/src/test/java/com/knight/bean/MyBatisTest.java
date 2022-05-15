@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 import java.io.InputStream;
 
+@DisplayName("1、MyBatis连接测试")
 public class MyBatisTest {
 
     @DisplayName("程序运行测试")

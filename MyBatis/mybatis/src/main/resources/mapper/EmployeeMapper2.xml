@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.knight.dao.EmployeeDao">
+
+
+    <!-- int updateEmployee(Employee employee); -->
+    <update id="updateEmployee">
+        update t_employee
+        set empname = #{empName},
+            gender  = #{gender},
+            email   = #{email}
+        where id = #{id}
+    </update>
+
+    <!-- int deleteEmployee(Integer id); -->
+    <delete id="deleteEmployee">
+        delete
+        from t_employee
+        where id = #{id}
+    </delete>
+
+    <!-- int insertEmployee(Employee employee); -->
+    <!--
+        自动的将自增的id赋值给传入的employee对象的id字段
+        useGeneratedKeys: true （仅适用于 insert 和 update）这会令 MyBatis 使用 JDBC 的 getGeneratedKeys 方法来取出由数据库内部生成的主键
+        keyProperty: 指定将自增的id赋值给哪个字段
+    -->
+    <insert id="insertEmployee" useGeneratedKeys="true" keyProperty="id">
+        insert into t_employee(empname, gender, email)
+        values (#{empName}, #{gender}, #{email})
+    </insert>
+
+    <!-- Employee getEmpByIdAndName(Integer id, String name); -->
+    <!--
+        参数也可以指定一个特殊的数据类型
+        【对于Oracle】如果 null 被当作值来传递，对于所有可能为空的列，jdbcType 需要被设置
+     -->
+    <select id="getEmpByIdAndName" resultType="com.knight.bean.Employee">
+        select *
+        from t_employee
+        where id = #{id,jdbcType=INTEGER}
+          and empname = #{empName}
+    </select>
+
+    <!--
+        两种取值方式 #{}、${}
+        #{key}：获取参数的值，预编译到SQL中。安全，不会有SQL注入问题
+        ${key}：获取参数的值，拼接到SQL中。有SQL注入问题。ORDER BY ${name}
+        但是sql语句只有参数位置是支持#{}预编译的，其他地方用${}
+    -->
+    <!-- Employee getEmpByIdAndNameAndTable(@Param("id") Integer id, @Param("empName") String name, @Param("table") String table); -->
+    <select id="getEmpByIdAndNameAndTable" resultType="com.knight.bean.Employee">
+        select *
+        from ${table}
+        where id = #{id}
+          and empname = #{empName}
+    </select>
+
+</mapper>

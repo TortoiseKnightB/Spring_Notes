@@ -3,23 +3,53 @@
         PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
+    <!--
+        引用外部配置文件
+        resource: 从类路径下开始引用
+        url: 引用磁盘路径或者网络路径
+    -->
+    <properties resource="dbconfig.properties"></properties>
+
+    <!-- 这是 MyBatis 中极为重要的调整设置，它们会改变 MyBatis 的运行时行为。更多的请看官网(https://mybatis.org/mybatis-3/zh/configuration.html#settings) -->
+    <settings>
+        <!-- 是否开启驼峰命名自动映射，即从经典数据库列名 A_COLUMN 映射到经典 Java 属性名 aColumn -->
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+    </settings>
+
+    <!--
+        default: 默认使用哪个环境
+        后来数据源和事务管理都用Spring来做
+    -->
     <environments default="development">
+        <!-- 配置一个具体的环境，需要一个事务管理器和一个数据源 -->
         <environment id="development">
             <transactionManager type="JDBC"/>
+            <!-- 配置连接池 -->
             <dataSource type="POOLED">
-                <property name="driver" value="com.mysql.cj.jdbc.Driver"/>
-                <property name="url"
-                          value="jdbc:mysql://alicloud:3306/mybatis?serverTimezone=UTC&amp;allowMultiQueries=true"/>
-                <property name="username" value="root"/>
-                <property name="password" value="123456Ben"/>
+                <property name="username" value="${username}"/>
+                <property name="password" value="${password}"/>
+                <property name="url" value="${jdbcurl}"/>
+                <property name="driver" value="${driver}"/>
             </dataSource>
         </environment>
     </environments>
 
+    <!-- MyBatis 可以根据不同的数据库厂商执行不同的语句 -->
+    <databaseIdProvider type="DB_VENDOR">
+        <property name="SQL Server" value="sqlserver"/>
+        <property name="MySQL" value="mysql"/>
+        <property name="Oracle" value="oracle"/>
+    </databaseIdProvider>
+
     <!-- 引入我们自己编写的每一个接口的实现文件 -->
     <mappers>
-        <!--resource:表示从类路径下找资源  -->
-        <mapper resource="mapper/EmployeeDao.xml"/>
+        <!--
+            resource: 表示从类路径下找资源
+            url: 使用完全限定资源定位符（URL）
+            class: 使用映射器接口实现类的完全限定类名
+        -->
+<!--        <mapper resource="mapper/EmployeeMapper.xml"/>-->
+        <mapper resource="mapper/EmployeeMapper2.xml"/>
     </mappers>
 
 </configuration>
