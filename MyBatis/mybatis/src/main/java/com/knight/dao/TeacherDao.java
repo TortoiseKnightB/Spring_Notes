@@ -15,4 +15,6 @@ public interface TeacherDao {
 
     List<Teacher> getTeacherByConditionChoose(Teacher teacher);
 
+    int updateTeacher(Teacher teacher);
+
 }

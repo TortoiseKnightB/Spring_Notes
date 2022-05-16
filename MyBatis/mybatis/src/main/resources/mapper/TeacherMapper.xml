@@ -13,12 +13,12 @@
         <result property="birth" column="birth_date"/>
     </resultMap>
 
-    <!-- Teacher getTeacherById(Integer id); -->
-    <select id="getTeacherById" resultMap="teacherMap">
-        select *
-        from t_teacher
-        where id = #{id}
-    </select>
+<!--    &lt;!&ndash; Teacher getTeacherById(Integer id); &ndash;&gt;-->
+<!--    <select id="getTeacherById" resultMap="teacherMap">-->
+<!--        select *-->
+<!--        from t_teacher-->
+<!--        where id = #{id}-->
+<!--    </select>-->
 
 
     <!-- List<Teacher> getTeacherByCondition(Teacher teacher); -->
@@ -98,5 +98,51 @@
             </choose>
         </where>
     </select>
+
+
+    <!-- int updateTeacher(Teacher teacher); -->
+    <update id="updateTeacher">
+        update t_teacher
+        <!--
+            set 帮助去掉每个语句后的逗号
+        -->
+        <set>
+            <if test="name!=null and !name.equals(&quot;&quot;)">
+                teacherName = #{name},
+            </if>
+            <if test="course!=null and !course.equals(&quot;&quot;)">
+                class_name = #{course},
+            </if>
+            <if test="address!=null and !address.equals(&quot;&quot;)">
+                address = #{address},
+            </if>
+            <if test="birth!=null ">
+                birth_date = #{birth}
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+
+
+    <!-- 抽取可重用sql语句 -->
+    <sql id="selectSql">
+        select *
+        from t_teacher
+    </sql>
+    <!-- Teacher getTeacherById(Integer id); -->
+    <select id="getTeacherById" resultMap="teacherMap">
+        <include refid="selectSql"></include>
+        where id = #{id}
+    </select>
+
+
+    <!--
+        OGNL表达式
+        _parameter:
+            传入单个参数，_parameter就代表这个参数
+            传入多个参数，_parameter就代表多个参数组成的map
+        _databaseId: 代表当前环境，如果配置了databaseIdProvider，_databaseId就有值
+     -->
+
 
 </mapper>

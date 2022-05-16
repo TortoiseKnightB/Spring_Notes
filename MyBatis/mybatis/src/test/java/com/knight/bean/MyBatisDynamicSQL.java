@@ -15,7 +15,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-@DisplayName("动态SQL")
+@DisplayName("5、动态SQL")
 public class MyBatisDynamicSQL {
 
     SqlSessionFactory sqlSessionFactory;
@@ -93,6 +93,27 @@ public class MyBatisDynamicSQL {
             for (Teacher t : teacherList) {
                 System.out.println(t);
             }
+        } finally {
+            session.close();
+        }
+    }
+
+
+    @DisplayName("set + if 标签测试")
+    @Test
+    void test5() {
+        SqlSession session = sqlSessionFactory.openSession();
+        try {
+            TeacherDao mapper = session.getMapper(TeacherDao.class);
+            Teacher teacher = new Teacher();
+            teacher.setId(1);
+            teacher.setName("老师1");
+            teacher.setCourse("体育");
+            teacher.setAddress("徐家汇");
+            teacher.setBirth(new Date());
+            int i = mapper.updateTeacher(teacher);
+            System.out.println(i);
+            session.commit();
         } finally {
             session.close();
         }
