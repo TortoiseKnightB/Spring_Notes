@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.knight.dao.TeacherDao">
+
+    <resultMap id="teacherMap" type="com.knight.bean.Teacher">
+        <id property="id" column="id"/>
+        <result property="name" column="teacherName"/>
+        <result property="course" column="class_name"/>
+        <result property="address" column="address"/>
+        <result property="birth" column="birth_date"/>
+    </resultMap>
+
+    <!-- Teacher getTeacherById(Integer id); -->
+    <select id="getTeacherById" resultMap="teacherMap">
+        select *
+        from t_teacher
+        where id = #{id}
+    </select>
+
+
+    <!-- List<Teacher> getTeacherByCondition(Teacher teacher); -->
+    <select id="getTeacherByCondition" resultMap="teacherMap">
+        select *
+        from t_teacher
+        <!--
+            trim 截取字符串
+            prefix: 整体字符串添加一个前缀
+            prefixOverrides: 去掉整体字符串前面多余的字符
+            suffix: 整体字符串添加一个后缀
+            suffixOverrides: 去掉整体字符串后面多余的字符
+         -->
+        <trim prefix="where" suffixOverrides="and">
+            <!--
+                test=: 编写判断条件
+                and/or/&amp;&amp;/||
+                &quot;&quot;/&lt;
+             -->
+            <if test="id!=null">
+                id > #{id} and
+            </if>
+            <if test="name!=null and name!=''">
+                teacherName like #{name} and
+            </if>
+            <if test="birth!=null">
+                birth_date &lt; #{birth} and
+            </if>
+        </trim>
+    </select>
+
+
+    <!-- List<Teacher> getTeacherByIdIn(List<Integer> ids); -->
+    <select id="getTeacherByIdIn" resultMap="teacherMap">
+        select *
+        from t_teacher
+        where id in
+        <!--
+            foreach 对一个集合进行遍历，通常是在构建 IN 条件语句的时候
+            collection: 指定要遍历的集合
+            index:
+                如果遍历的是List，index是当前迭代的次数
+                如果遍历的是Map，– index是键，item是值
+            item: 每次遍历出的元素，起一个变量名
+            close: 以什么结束
+            open: 以什么开始
+            separator: 每个元素之间的分隔符
+            (#{id_item},#{id_item},#{id_item})
+        -->
+        <foreach collection="ids" item="id_item" index="" open="(" close=")" separator=",">
+            #{id_item}
+        </foreach>
+    </select>
+
+
+    <!-- List<Teacher> getTeacherByConditionChoose(Teacher teacher); -->
+    <select id="getTeacherByConditionChoose" resultMap="teacherMap">
+        select *
+        from t_teacher
+        <where>
+            <!--
+                choose、when、otherwise 相当于 switch case default
+            -->
+            <choose>
+                <when test="id!=null">
+                    id=#{id}
+                </when>
+                <when test="name!=null and !name.equals(&quot;&quot;)">
+                    teacherName = #{name}
+                </when>
+                <when test="birth!=null">
+                    birth_date &lt; #{birth}
+                </when>
+                <otherwise>
+                    1=1
+                </otherwise>
+            </choose>
+        </where>
+    </select>
+
+</mapper>

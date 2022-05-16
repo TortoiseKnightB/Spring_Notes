@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.knight.dao.KeyDao">
+
+    <resultMap id="myKey" type="com.knight.bean.Key">
+        <id property="id" column="kid"/>
+        <result property="keyName" column="keyName"/>
+        <result property="lock.id" column="lid"/>
+        <result property="lock.lockName" column="lockName"/>
+    </resultMap>
+
+    <!-- 推荐：association 定义级联字段 -->
+    <resultMap id="myKey2" type="com.knight.bean.Key">
+        <id property="id" column="kid"/>
+        <result property="keyName" column="keyName"/>
+        <association property="lock" javaType="com.knight.bean.Lock">
+            <id property="id" column="lid"/>
+            <result property="lockName" column="lockName"/>
+        </association>
+    </resultMap>
+
+    <!-- Key getKeyById(Integer id); -->
+    <select id="getKeyById" resultMap="myKey2">
+        -- kid keyName lid lockName
+        select k.id kid, k.ketName keyName, l.`id` lid, l.lockName
+        from t_key k
+                 left join t_lock l on k.`lockId` = l.`id`
+        where k.`id` = #{id};
+    </select>
+
+
+</mapper>

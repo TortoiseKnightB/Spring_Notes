@@ -51,6 +51,9 @@
 <!--        <mapper resource="mapper/EmployeeMapper.xml"/>-->
         <mapper resource="mapper/EmployeeMapper2.xml"/>
         <mapper resource="mapper/CatMapper.xml"/>
+        <mapper resource="mapper/KeyMapper.xml"/>
+        <mapper resource="mapper/LockMapper.xml"/>
+        <mapper resource="mapper/TeacherMapper.xml"/>
     </mappers>
 
 </configuration>
