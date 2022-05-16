@@ -13,12 +13,12 @@
         <result property="birth" column="birth_date"/>
     </resultMap>
 
-<!--    &lt;!&ndash; Teacher getTeacherById(Integer id); &ndash;&gt;-->
-<!--    <select id="getTeacherById" resultMap="teacherMap">-->
-<!--        select *-->
-<!--        from t_teacher-->
-<!--        where id = #{id}-->
-<!--    </select>-->
+    <!--    &lt;!&ndash; Teacher getTeacherById(Integer id); &ndash;&gt;-->
+    <!--    <select id="getTeacherById" resultMap="teacherMap">-->
+    <!--        select *-->
+    <!--        from t_teacher-->
+    <!--        where id = #{id}-->
+    <!--    </select>-->
 
 
     <!-- List<Teacher> getTeacherByCondition(Teacher teacher); -->
