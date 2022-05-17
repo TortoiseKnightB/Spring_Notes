@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!-- 引用外部属性文件，依赖context名称空间 -->
+    <!-- 加载外部配置文件。固定写法classpath:表示引用类路径下的文件 -->
+    <context:property-placeholder location="classpath:dbconfig.properties"/>
+    <!-- 数据库连接池作为单实例是最好的：一个项目就一个连接池，连接池里面管理很多连接。可以让Spring管理连接池 -->
+    <!--    <bean id="dataSource" class="ComboPooledDataSource">-->
+    <!--        &lt;!&ndash; username是关键字，不能用 &ndash;&gt;-->
+    <!--        <property name="user" value="${jdbc.username}"></property>-->
+    <!--        <property name="password" value=""></property>-->
+    <!--        <property name="jdbcUrl" value=""></property>-->
+    <!--        <property name="driverClass" value=""></property>-->
+    <!--    </bean>-->
+
+    <bean id="car" class="com.knight.bean.Car">
+        <property name="carName" value="${jdbc.username}"></property>
+        <property name="color" value="${password}"></property>
+    </bean>
+
+    <!-- 自动装配autowire -->
+    <!--
+        按照某种规则自动装配
+            1、byName：以字段名作为id去容器中找到这个组件，并赋值；找不到赋值null
+                类似于car = ioc.geBean("car");
+            2、byType：以字段类型作为依据去容器这种查找这个组件；若容器中有多个该类型组件，报错；找不到赋值null
+                类似于car = ioc.geBean(Car.class);
+            3、constructor：以有参构造器参数的类型为依据，去容器中查找组件作为构造器的参数；找不到赋值null
+                            如果按参数类型找到多个，以参数名作为id继续匹配
+                            不会报错
+            若字段为List类型，容器中符合的组件全部装进去-->
+    <bean id="person" class="com.knight.bean.Person" autowire="constructor"></bean>
+
+</beans>

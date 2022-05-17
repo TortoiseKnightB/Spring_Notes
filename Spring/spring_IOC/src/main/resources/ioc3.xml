@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- bean的作用域 -->
+    <!--
+        prototype：多实例
+            1、容器启动默认不会去创建实例bean
+            2、获取的时候创建这个bean
+            3、每次获取都会创建一个新的实例对象
+        singleton：单实例，默认的
+            1、在容器启动完成之前已经创建好对象，保存在容器中
+            2、任何时候获取都是之前创建好的那个对象
+    -->
+    <bean id="book" class="com.knight.bean.Book" scope="prototype">
+        <property name="bookName" value="红楼梦"></property>
+    </bean>
+
+
+    <!-- 静态工厂 -->
+    <bean id="airPlane01" class="com.knight.factory.AirPlaneStaticFactory" factory-method="getAirPlane">
+        <constructor-arg name="captainName" value="张三机长"></constructor-arg>
+    </bean>
+
+    <!-- 实例工厂 -->
+    <bean id="airPlaneStaticFactory" class="com.knight.factory.AirPlaneInstanceFactory"></bean>
+    <bean id="airPlane02" class="com.knight.bean.AirPlane" factory-bean="airPlaneStaticFactory"
+          factory-method="getAirPlane">
+        <constructor-arg name="captainName" value="王五机长"></constructor-arg>
+    </bean>
+
+    <!-- FactoryBean接口 -->
+    <!-- FactoryBean接口的实现类，Spring都认为是一个工厂 -->
+    <!--
+        1、ioc容器启动时不会创建实例
+        2、无论单实例还是多实例，都是在获取的时候创建对象
+    -->
+    <bean id="myFactoryBeanImp" class="com.knight.factory.MyFactoryBeanImp"></bean>
+</beans>

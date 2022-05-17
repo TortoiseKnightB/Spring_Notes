@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="person05" class="com.knight.bean.Person">
+        <property name="lastName">
+            <!-- 赋值为null -->
+            <null></null>
+        </property>
+
+        <!--    ref：引用外面的一个值    -->
+        <!--        <property name="car" ref="car01"></property>-->
+        <property name="car">
+            <bean class="com.knight.bean.Car">
+                <property name="carName" value="自行车"></property>
+            </bean>
+        </property>
+
+        <!--   list类型赋值     -->
+        <property name="books">
+            <list>
+                <bean class="com.knight.bean.Book" p:bookName="西游记"></bean>
+                <ref bean="book01"></ref>
+            </list>
+        </property>
+
+        <!-- Map类型赋值 -->
+        <property name="maps">
+            <map>
+                <entry key="key01" value="张三"></entry>
+                <entry key="key02" value="18"></entry>
+                <entry key="key03" value-ref="book01"></entry>
+                <entry key="key04">
+                    <bean class="com.knight.bean.Car">
+                        <property name="carName" value="奔驰"></property>
+                    </bean>
+                </entry>
+            </map>
+        </property>
+
+        <property name="properties">
+            <props>
+                <prop key="username">root</prop>
+                <prop key="password">123456</prop>
+            </props>
+        </property>
+    </bean>
+
+    <bean id="person06" class="com.knight.bean.Person">
+        <property name="car" ref="car01"></property>
+        <!-- 级联属性赋值（属性的属性赋值） -->
+        <!-- 级联属性会修改原来bean的值 -->
+        <property name="car.carName" value="飞碟"></property>
+    </bean>
+
+    <bean id="car01" class="com.knight.bean.Car">
+        <property name="carName" value="宝马"></property>
+        <property name="color" value="green"></property>
+        <property name="price" value="30000"></property>
+    </bean>
+
+    <bean id="book01" class="com.knight.bean.Book">
+        <property name="bookName" value="三国演义"></property>
+    </bean>
+
+</beans>
