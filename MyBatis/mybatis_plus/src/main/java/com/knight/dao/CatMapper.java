@@ -1,6 +1,8 @@
 package com.knight.dao;
 
 import com.knight.bean.Cat;
+import org.apache.ibatis.annotations.Param;
+
 import java.util.List;
 
 public interface CatMapper {
@@ -43,4 +45,7 @@ public interface CatMapper {
      * @mbg.generated Tue May 17 14:14:50 CST 2022
      */
     int updateByPrimaryKey(Cat record);
+
+    // 批量插入
+    void insertBatch(@Param("cats") List<Cat> cats);
 }
