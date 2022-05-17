@@ -5,6 +5,7 @@
 
 <generatorConfiguration>
 
+    <!--    <context id="DB2Tables" targetRuntime="MyBatis3">-->
     <context id="DB2Tables" targetRuntime="MyBatis3Simple">
         <!--
             jdbcConnection 连接哪个数据库
