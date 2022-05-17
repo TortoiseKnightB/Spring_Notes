@@ -1,3 +1,5 @@
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.mybatis.generator.api.MyBatisGenerator;
 import org.mybatis.generator.config.Configuration;
 import org.mybatis.generator.config.xml.ConfigurationParser;
@@ -7,8 +9,11 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+@DisplayName("MGB项目")
 public class MBGTest {
 
+    @DisplayName("MGB生成")
+    @Test
     void test() throws Exception {
         List<String> warnings = new ArrayList<String>();
         boolean overwrite = true;
