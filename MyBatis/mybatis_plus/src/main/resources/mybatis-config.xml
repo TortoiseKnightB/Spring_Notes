@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <!--
+        引用外部配置文件
+        resource: 从类路径下开始引用
+        url: 引用磁盘路径或者网络路径
+    -->
+    <properties resource="dbconfig.properties"></properties>
+
+    <settings>
+        <!-- 是否开启驼峰命名自动映射，即从经典数据库列名 A_COLUMN 映射到经典 Java 属性名 aColumn -->
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+        <!-- 开启全局缓存开关（二级缓存） -->
+        <setting name="cacheEnabled" value="true"/>
+    </settings>
+
+    <!--
+        default: 默认使用哪个环境
+        后来数据源和事务管理都用Spring来做
+    -->
+    <environments default="development">
+        <!-- 配置一个具体的环境，需要一个事务管理器和一个数据源 -->
+        <environment id="development">
+            <transactionManager type="JDBC"/>
+            <!-- 配置连接池 -->
+            <dataSource type="POOLED">
+                <property name="username" value="${username}"/>
+                <property name="password" value="${password}"/>
+                <property name="url" value="${jdbcurl}"/>
+                <property name="driver" value="${driver}"/>
+            </dataSource>
+        </environment>
+    </environments>
+
+    <!-- 引入我们自己编写的每一个接口的实现文件 -->
+    <mappers>
+        <mapper resource="mapper/CatMapper.xml"/>
+    </mappers>
+
+</configuration>

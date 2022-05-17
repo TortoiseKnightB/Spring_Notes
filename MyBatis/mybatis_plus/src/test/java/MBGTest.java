@@ -1,3 +1,9 @@
+import com.knight.bean.Cat;
+import com.knight.dao.CatMapper;
+import org.apache.ibatis.io.Resources;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mybatis.generator.api.MyBatisGenerator;
@@ -6,6 +12,8 @@ import org.mybatis.generator.config.xml.ConfigurationParser;
 import org.mybatis.generator.internal.DefaultShellCallback;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,4 +33,24 @@ public class MBGTest {
         myBatisGenerator.generate(null);
         System.out.println("代码生成完毕");
     }
+
+
+    @DisplayName("MGB测试")
+    @Test
+    void test2() throws IOException {
+        String resource = "mybatis-config.xml";
+        InputStream inputStream = Resources.getResourceAsStream(resource);
+        SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
+
+        SqlSession session = sqlSessionFactory.openSession();
+        CatMapper mapper = session.getMapper(CatMapper.class);
+        List<Cat> cats = mapper.selectAll();
+        session.close();
+
+        for (Cat cat : cats) {
+            System.out.println(cat);
+        }
+    }
+
+
 }
