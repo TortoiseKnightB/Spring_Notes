@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.knight</groupId>
-    <artifactId>boot-01-helloworld</artifactId>
+    <artifactId>boot-02-helloworld2</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
@@ -24,22 +24,35 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
         </dependency>
+        <!-- 为 自定义的类和配置文件绑定 提供提示（.yml） -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>
     </dependencies>
-
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
     </properties>
 
-
-    <!-- 简化部署，把项目打成jar包，直接在目标服务器执行即可 -->
     <build>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>2.6.7</version>
+                <configuration>
+                    <!-- 打包的时候排除不必要的类 -->
+                    <excludes>
+                        <exclude>
+                            <!-- 这个已经默认排除了 -->
+                            <!--                            <groupId>org.springframework.boot</groupId>-->
+                            <!--                            <artifactId>spring-boot-configuration-processor</artifactId>-->
+                        </exclude>
+                    </excludes>
+                </configuration>
             </plugin>
         </plugins>
     </build>
