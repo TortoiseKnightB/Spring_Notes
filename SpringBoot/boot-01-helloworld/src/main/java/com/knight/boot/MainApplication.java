@@ -69,8 +69,5 @@ public class MainApplication {
         System.out.println("\n********** @Conditional ***********");
         boolean userToy01 = run.containsBean("userToy01");
         System.out.println("容器中是否存在userToy01组件：" + userToy01);
-
-
-
     }
 }
