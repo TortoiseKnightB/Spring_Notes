@@ -1,11 +1,14 @@
 package com.knight.boot.controller;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,4 +35,36 @@ public class RequestController {
         map.put("annotation_msg", msg);
         return map;
     }
+
+
+    // 复杂参数解析
+    // http://localhost:8080/params
+    @GetMapping("/params")
+    public String testParam(Map<String, Object> map,
+                            Model model,
+                            HttpServletRequest request,
+                            HttpServletResponse response) {
+        map.put("hello", "world6666");
+        model.addAttribute("world", "hello666");
+        request.setAttribute("message", "HelloWorld");
+        Cookie cookie = new Cookie("c1", "v1");
+        cookie.setDomain("localhost");
+        response.addCookie(cookie);
+        return "forward:/success2";
+    }
+
+    @ResponseBody
+    @GetMapping("/success2")
+    public Map success2(HttpServletRequest request) {
+        Map<String, Object> map = new HashMap<>();
+        Object hello = request.getAttribute("hello");
+        Object world = request.getAttribute("world");
+        Object message = request.getAttribute("message");
+
+        map.put("hello", hello);
+        map.put("world", world);
+        map.put("message", message);
+        return map;
+    }
+
 }

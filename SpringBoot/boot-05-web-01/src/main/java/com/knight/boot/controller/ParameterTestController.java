@@ -1,5 +1,6 @@
 package com.knight.boot.controller;
 
+import com.knight.boot.bean.Person;
 import com.knight.boot.bean.Pet;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
@@ -24,23 +25,25 @@ public class ParameterTestController {
                                       @RequestHeader Map<String, String> header,
                                       @RequestParam("age") Integer age,
                                       @RequestParam("inters") List<String> inters,
-                                      @RequestParam MultiValueMap<String, String> params,
-                                      @CookieValue("SL_G_WPT_TO") String _cookie,
-                                      @CookieValue("SL_G_WPT_TO") Cookie cookie) {
+                                      @RequestParam MultiValueMap<String, String> params
+//            ,
+//                                      @CookieValue("SL_G_WPT_TO") String _cookie,
+//                                      @CookieValue("SL_G_WPT_TO") Cookie cookie
+    ) {
 
 
         Map<String, Object> map = new HashMap<>();
 
-//        map.put("id", id);
-//        map.put("name", name);
-//        map.put("pv", pv);
-//        map.put("userAgent",userAgent);
-//        map.put("headers",header);
-//        map.put("age", age);
-//        map.put("inters", inters);
-//        map.put("params", params);
-        map.put("SL_G_WPT_TO", _cookie);
-        System.out.println(cookie.getName() + "===>" + cookie.getValue());
+        map.put("id", id);
+        map.put("name", name);
+        map.put("pv", pv);
+        map.put("userAgent", userAgent);
+        map.put("headers", header);
+        map.put("age", age);
+        map.put("inters", inters);
+        map.put("params", params);
+//        map.put("SL_G_WPT_TO", _cookie);
+//        System.out.println(cookie.getName() + "===>" + cookie.getValue());
         return map;
     }
 
@@ -74,14 +77,31 @@ public class ParameterTestController {
 
     // /boss/1;age=20/2;age=10
     @GetMapping("/boss/{bossId}/{empId}")
-    public Map boss(@MatrixVariable(value = "age",pathVar = "bossId") Integer bossAge,
-                    @MatrixVariable(value = "age",pathVar = "empId") Integer empAge){
-        Map<String,Object> map = new HashMap<>();
+    public Map boss(@MatrixVariable(value = "age", pathVar = "bossId") Integer bossAge,
+                    @MatrixVariable(value = "age", pathVar = "empId") Integer empAge) {
+        Map<String, Object> map = new HashMap<>();
 
-        map.put("bossAge",bossAge);
-        map.put("empAge",empAge);
+        map.put("bossAge", bossAge);
+        map.put("empAge", empAge);
         return map;
 
+    }
+
+
+    // 自定义对象参数
+    // http://localhost:8080/saveuser
+//    {
+//        "username": "张三",
+//            "age": 24,
+//            "birth": "",
+//            "pet": {
+//        "name": "阿猫",
+//                "weight": 18
+//    }
+//    }
+    @PostMapping("/saveuser")
+    public Person saveUser(@RequestBody Person person) {
+        return person;
     }
 
 }
