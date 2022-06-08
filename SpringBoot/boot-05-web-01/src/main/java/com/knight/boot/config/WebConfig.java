@@ -1,6 +1,7 @@
 package com.knight.boot.config;
 
 import com.knight.boot.converter.KnightMessageConverter;
+import com.knight.boot.interceptor.LoginInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
@@ -8,6 +9,7 @@ import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.accept.HeaderContentNegotiationStrategy;
 import org.springframework.web.accept.ParameterContentNegotiationStrategy;
 import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.util.UrlPathHelper;
@@ -50,5 +52,22 @@ public class WebConfig implements WebMvcConfigurer {
         HeaderContentNegotiationStrategy headerContentNegotiationStrategy = new HeaderContentNegotiationStrategy();
         // 这个会取消掉默认的其他内容协商策略，可以尝试 configurer.mediaType()
         configurer.strategies(Arrays.asList(parameterContentNegotiationStrategy, headerContentNegotiationStrategy));
+    }
+
+
+    // 添加拦截器
+
+    /**
+     * 1、编写一个拦截器实现HandlerInterceptor接口
+     * <p>
+     * 2、拦截器注册到容器中（实现WebMvcConfigurer的addInterceptors）
+     * <p>
+     * 3、指定拦截规则【如果是拦截所有，静态资源也会被拦截】
+     */
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(new LoginInterceptor())
+                .addPathPatterns("/**")  // 所有请求都被拦截包括静态资源
+                .excludePathPatterns("/", "/login", "/haha/**"); // 放行的请求
     }
 }

@@ -3,11 +3,14 @@ package com.knight.boot.controller;
 import com.knight.boot.bean.Person;
 import com.knight.boot.bean.Pet;
 import org.springframework.util.MultiValueMap;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.security.SecureRandom;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -120,6 +123,30 @@ public class ParameterTestController {
     @PostMapping("/saveuser")
     public Person saveUser(@RequestBody Person person) {
         return person;
+    }
+
+
+    // 简单代替登录页面
+    // http://localhost:8080/login?username=admin&password=123456
+    @GetMapping("/login")
+    public String login(String username, String password, HttpSession session) {
+
+        System.out.println("当前执行方法为：/login");
+
+        if (StringUtils.hasLength(username) && "123456".equals(password)) {
+            session.setAttribute("loginUser", username);
+            return session.getAttribute("loginUser") + " login success";
+        }
+        return "login fail";
+    }
+
+    // 代替登录后的用户信息页面
+    @GetMapping("/userInfo")
+    public String userInfo(HttpSession session) {
+
+        System.out.println("当前执行方法为：/userInfo");
+
+        return session.getAttribute("loginUser") + "";
     }
 
 
