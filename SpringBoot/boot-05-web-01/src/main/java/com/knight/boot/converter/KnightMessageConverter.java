@@ -49,7 +49,7 @@ public class KnightMessageConverter implements HttpMessageConverter<Person> {
 
         // 写出去
         OutputStream body = outputMessage.getBody();
-        body.write(data.getBytes());
+        body.write(data.getBytes("gbk"));
 
     }
 }
