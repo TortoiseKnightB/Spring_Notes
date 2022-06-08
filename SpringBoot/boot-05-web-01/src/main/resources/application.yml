@@ -5,3 +5,7 @@ spring:
   web:
     resources:
       static-locations: classpath:/haha/
+
+  mvc:
+    contentnegotiation:
+      favor-parameter: true #开启请求参数内容协商模式：http://localhost:8080/test/person?format=json、http://localhost:8080/test/person?format=xml

@@ -89,19 +89,38 @@ public class ParameterTestController {
 
 
     // 自定义对象参数
-    // http://localhost:8080/saveuser
-//    {
-//        "username": "张三",
-//            "age": 24,
-//            "birth": "",
-//            "pet": {
-//        "name": "阿猫",
-//                "weight": 18
-//    }
-//    }
+    /**
+     http://localhost:8080/saveuser
+     {
+     "username": "张三",
+     "age": 24,
+     "birth": "",
+     "pet": {
+     "name": "阿猫",
+     "weight": 18
+     }
+     }
+     **/
+    /**
+     * 1、浏览器发请求直接返回 xml    [application/xml]        jacksonXmlConverter
+     * <p>
+     * 2、如果是ajax请求 返回 json   [application/json]      jacksonJsonConverter
+     * <p>
+     * 3、如果硅谷app发请求，返回自定义协议数据  [appliaction/x-guigu]   xxxxConverter
+     * <p>
+     * 属性值1;属性值2;
+     * <p>
+     * 步骤：
+     * 1、添加自定义的MessageConverter进系统底层
+     * <p>
+     * 2、系统底层就会统计出所有MessageConverter能操作哪些类型
+     * <p>
+     * 3、客户端内容协商 [guigu--->guigu]
+     */
     @PostMapping("/saveuser")
     public Person saveUser(@RequestBody Person person) {
         return person;
     }
+
 
 }
