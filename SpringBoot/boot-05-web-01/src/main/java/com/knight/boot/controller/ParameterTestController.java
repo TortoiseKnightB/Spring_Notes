@@ -2,19 +2,24 @@ package com.knight.boot.controller;
 
 import com.knight.boot.bean.Person;
 import com.knight.boot.bean.Pet;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.MultiValueMap;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.File;
+import java.io.IOException;
 import java.security.SecureRandom;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @RestController
 public class ParameterTestController {
 
@@ -147,6 +152,38 @@ public class ParameterTestController {
         System.out.println("当前执行方法为：/userInfo");
 
         return session.getAttribute("loginUser") + "";
+    }
+
+
+    // 文件上传
+    // 由于前面配置了拦截器，先登录 http://localhost:8080/login?username=admin&password=123456
+    // 再上传文件 http://localhost:8080/uploadPage.html
+
+    /**
+     * MultipartFile 自动封装上传过来的文件
+     */
+    @PostMapping("/nologin/upload")
+    public String upload(@RequestPart("headerImg") MultipartFile headerImg,
+                         @RequestPart("photos") MultipartFile[] photos) throws IOException {
+
+        String info = "上传的信息：headerImg=" + headerImg.getSize() + "，photos=" + photos.length;
+
+        if (!headerImg.isEmpty()) {
+            // 保存到文件服务器，OSS服务器
+            String originalFilename = headerImg.getOriginalFilename();
+            headerImg.transferTo(new File("F:\\cache\\" + originalFilename));
+        }
+
+        if (photos.length > 0) {
+            for (MultipartFile photo : photos) {
+                if (!photo.isEmpty()) {
+                    String originalFilename = photo.getOriginalFilename();
+                    photo.transferTo(new File("F:\\cache\\" + originalFilename));
+                }
+            }
+        }
+
+        return info;
     }
 
 
