@@ -1,5 +1,6 @@
 package com.knight.boot.controller;
 
+import com.knight.boot.exception.MyException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -65,6 +66,24 @@ public class RequestController {
         map.put("world", world);
         map.put("message", message);
         return map;
+    }
+
+
+    // 异常处理流程
+    // http://localhost:8080/getError
+    @GetMapping("/getError")
+    public String getError() {
+        int i = 10 / 0;
+        return "forward:/success2";
+    }
+
+    // 自定义异常
+    // http://localhost:8080/myError
+    @GetMapping("/myError")
+    public String myError() {
+
+        throw new MyException("我抛出了一个自定义异常");
+
     }
 
 }
