@@ -245,7 +245,94 @@ public class BookService {
   
   - @Resource 扩展性强，是java的标准，切换成其他的容器框架后可以继续使用
 
-- 通过带泛型的父类类型确定注入的子类
+##### 泛型依赖注入
+
+- 子类之间的依赖关系由其父类泛型以及父类之间的依赖关系来确定，父类的泛型必须为同一类型。即**通过带泛型的父类类型确定注入的子类**
+
+<p align="center">
+        <img src="img/002.png" width="600" align=center  />
+</p>
+
+- Dao层代码
+
+```java
+public abstract class BaseDao<T> {
+    public abstract void work();
+}
+```
+
+```java
+@Repository
+public class StudentDao extends BaseDao<Student> {
+    @Override
+    public void work() {
+        System.out.println("Student doing homework...");
+    }
+}
+```
+
+```java
+@Repository
+public class TeacherDao extends BaseDao<Teacher>{
+    @Override
+    public void work() {
+        System.out.println("Teacher teaching...");
+    }
+}
+```
+
+- Service层代码
+
+```java
+public class BaseService<T> {
+    @Autowired
+    private BaseDao<T> baseDao;
+
+    public void work() {
+        System.out.println(baseDao);
+        baseDao.work();
+    }
+}
+```
+
+```java
+@Service
+public class StudentService extends BaseService<Student>{
+}
+```
+
+```java
+@Service
+public class TeacherService extends BaseService<Teacher> {
+}
+```
+
+- 测试代码
+
+```java
+    @DisplayName("泛型依赖注入")
+    @Test
+    public void test08() {
+        ApplicationContext ioc = new ClassPathXmlApplicationContext("ioc4.xml");
+
+        StudentService studentService = ioc.getBean(StudentService.class);
+        studentService.work();
+
+        System.out.println();
+        TeacherService teacherService = ioc.getBean(TeacherService.class);
+        teacherService.work();
+    }
+
+    /**
+    com.knight.boot.generics.dao.StudentDao@8519cb4
+    Student doing homework...
+     
+    com.knight.boot.generics.dao.TeacherDao@35dab4eb
+    Teacher teaching...
+    **/
+```
+
+- 优点：代码精简，将可重用的代码全部放在一个类之中，方便维护和修改，增加代码的复用性
 
 ### IOC原理
 

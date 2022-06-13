@@ -4,6 +4,8 @@ package com.knight.boot;
 import com.knight.boot.bean.Car;
 import com.knight.boot.bean.Person;
 import com.knight.boot.controller.BookController;
+import com.knight.boot.generics.service.StudentService;
+import com.knight.boot.generics.service.TeacherService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.ApplicationContext;
@@ -87,6 +89,20 @@ public class IOCTest {
         ApplicationContext ioc = new ClassPathXmlApplicationContext("ioc4.xml");
         BookController bookController = (BookController) ioc.getBean("bookController");
         bookController.getBook();
+    }
+
+
+    @DisplayName("泛型依赖注入")
+    @Test
+    public void test08() {
+        ApplicationContext ioc = new ClassPathXmlApplicationContext("ioc4.xml");
+
+        StudentService studentService = ioc.getBean(StudentService.class);
+        studentService.work();
+
+        System.out.println("********************");
+        TeacherService teacherService = ioc.getBean(TeacherService.class);
+        teacherService.work();
     }
 
 }
