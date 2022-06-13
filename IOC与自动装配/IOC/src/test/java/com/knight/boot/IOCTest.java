@@ -66,4 +66,12 @@ public class IOCTest {
         System.out.println("实现FactoryBean接口：" + car);
     }
 
+    @DisplayName("自动装配autowire")
+    @Test
+    public void test056() {
+        ApplicationContext ioc = new ClassPathXmlApplicationContext("ioc3.xml");
+        Object person = ioc.getBean("person");
+        System.out.println("自动装配autowire：" + person);
+    }
+
 }

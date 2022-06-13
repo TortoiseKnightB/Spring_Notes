@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+    <bean id="car" class="com.knight.boot.bean.Car">
+        <property name="price" value="50000.0"></property>
+        <property name="color" value="Red"></property>
+    </bean>
+
+    <!-- 自动装配autowire -->
+    <!--
+        按照某种规则自动装配
+            1、byName：以字段名作为id去容器中找到这个组件，并赋值；找不到赋值null
+                类似于car = ioc.geBean("car");
+            2、byType：以字段类型作为依据去容器这种查找这个组件；若容器中有多个该类型组件，报错；找不到赋值null
+                类似于car = ioc.geBean(Car.class);
+            3、constructor：以有参构造器参数的类型为依据，去容器中查找组件作为构造器的参数；找不到赋值null
+                            如果按参数类型找到多个，以参数名作为id继续匹配
+                            不会报错
+            若字段为List类型，容器中符合的组件全部装进去
+    -->
+    <bean id="person" class="com.knight.boot.bean.Person" autowire="byName">
+        <property name="name" value="张三"></property>
+        <property name="age" value="18"></property>
+    </bean>
+
+</beans>
