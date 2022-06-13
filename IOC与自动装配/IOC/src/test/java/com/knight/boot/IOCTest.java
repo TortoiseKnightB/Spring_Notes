@@ -38,4 +38,32 @@ public class IOCTest {
         System.out.println("person1 与 person2 是否为同一个对象：" + (person1 == person2));
     }
 
+
+    @DisplayName("工厂模式——自定义工厂类")
+    @Test
+    public void test04() {
+        ApplicationContext ioc = new ClassPathXmlApplicationContext("ioc2.xml");
+        Object car01 = ioc.getBean("car01");
+        System.out.println("静态工厂：" + car01);
+        Object car02 = ioc.getBean("car02");
+        System.out.println("实例工厂：" + car02);
+    }
+
+
+    @DisplayName("工厂模式——实现FactoryBean接口")
+    @Test
+    public void test05() {
+        ApplicationContext ioc = new ClassPathXmlApplicationContext("ioc2.xml");
+
+        System.out.println("容器启动完成，所有组件如下：");
+        String[] beanDefinitionNames2 = ioc.getBeanDefinitionNames();
+        for (String bean : beanDefinitionNames2) {
+            System.out.println(bean);
+        }
+
+        System.out.println("***********************************");
+        Object car = ioc.getBean("carFactoryBeanImp");
+        System.out.println("实现FactoryBean接口：" + car);
+    }
+
 }

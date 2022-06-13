@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+    <!-- 静态工厂 -->
+    <bean id="car01" class="com.knight.boot.factory.CarStaticFactory" factory-method="getCar">
+        <constructor-arg name="price" value="50000"></constructor-arg>
+        <constructor-arg name="color" value="Blue"></constructor-arg>
+    </bean>
+
+
+    <!-- 实例工厂 -->
+    <bean id="carInsanceFactory" class="com.knight.boot.factory.CarInsanceFactory"></bean>
+    <bean id="car02" class="com.knight.boot.bean.Car" factory-bean="carInsanceFactory"
+          factory-method="getCar">
+        <constructor-arg name="price" value="80000"></constructor-arg>
+        <constructor-arg name="color" value="Red"></constructor-arg>
+    </bean>
+
+
+    <!-- FactoryBean接口的实现类，Spring都会认为是一个工厂 -->
+    <!--
+        1、ioc容器启动时不会创建实例
+        2、无论单实例还是多实例，都是在获取的时候创建对象
+    -->
+    <bean id="carFactoryBeanImp" class="com.knight.boot.factory.CarFactoryBeanImp"></bean>
+
+</beans>
