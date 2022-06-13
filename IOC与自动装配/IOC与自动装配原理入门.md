@@ -153,15 +153,102 @@ public class CarFactoryBeanImp implements FactoryBean<Car> {
 - ioc容器启动时不会创建实例
 - 无论单实例还是多实例，都是在获取的时候创建对象
 
-##### 注解的使用
+##### 自动装配autowire
 
+```xml
+    <!-- Car{price=50000.0, color='Red'}-->
+    <bean id="car" class="com.knight.boot.bean.Car">
+        <property name="price" value="50000.0"></property>
+        <property name="color" value="Red"></property>
+    </bean>
 
+    <!-- Person{name='张三', age=18, car=Car{price=50000.0, color='Red'}} -->
+    <!-- Car通过自动装配规则自动赋值给Person -->
+    <bean id="person" class="com.knight.boot.bean.Person" autowire="byName">
+        <property name="name" value="张三"></property>
+        <property name="age" value="18"></property>
+    </bean>
+```
+
+- 自动装配规则
+  1、byName：以字段名作为id去容器中找到这个组件，并赋值；找不到赋值null；
+  
+  - 类似于`car = ioc.geBean("car");`
+  
+  2、byType：以字段类型作为依据去容器这种查找这个组件；若容器中有多个该类型组件，报错；找不到赋值null
+  
+  - 类似于`car = ioc.geBean(Car.class);`
+  
+  3、constructor：以有参构造器参数的类型为依据，去容器中查找组件作为构造器的参数；找不到赋值null
+  
+  - 如果按参数类型找到多个，以参数名作为id继续匹配，不会报错
+  - 若字段为List类型，容器中符合的组件全部装进去
+
+##### 基于注解的使用
+
+- 通过给bean上添加一下任意一个注解，可以快速将bean加入到ioc容器中
+  1、@Controller：控制器层组件注解
+  2、@Service：业务逻辑层注解
+  3、@Repository：数据层（持久化层，Dao层）组件注解
+  4、@Component：给不属于以上几层的组件添加这个注解
+
+- 开启组件扫描
+
+```xml
+    <!-- 
+        context:component-scan 自动扫描组件
+        base-package：自动扫描的基础包路径
+    -->
+    <context:component-scan base-package="com.knight">
+    </context:component-scan>
+```
+
+- 实现属性注入
+
+```java
+@Service
+public class BookService {
+
+    @Autowired
+    BookDao bookDao;
+
+    public void getBook() {
+        bookDao.getBook();
+    }
+}
+```
+
+- @Autowired
+  
+  - 先按照类型去容器中找到对应组件，即`bookService = ioc.getBean(BookService.class);`
+  - 若没找到，则抛异常
+  - 若找到多个，则按照变量名作为id继续匹配，若仍没匹配上则报错
+  - @Autowired(required = false)，找不到会返回null
+
+- @Resource
+  
+  - 可以根据类型注入属性，页可以根据id注入属性（`@Resource(name = "BookDao")`）
+
+- @Qualifier
+  
+  - 可以指定注入组件的id
+
+- @Value
+  
+  - 注入普通类型属性
+
+- @Autowired 与 @Resource 的区别
+  
+  - @Autowired：功能强大，是Spring自己的注解
+  
+  - @Resource：j2ee，java的标准
+  
+  - @Resource 扩展性强，是java的标准，切换成其他的容器框架后可以继续使用
+
+- 通过带泛型的父类类型确定注入的子类
 
 ### IOC原理
 
 ##### Bean的生命周期
-
-
-
 
 ### SpringBoot 自动装配原理入门

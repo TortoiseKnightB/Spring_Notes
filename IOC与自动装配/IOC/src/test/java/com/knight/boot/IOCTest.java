@@ -3,6 +3,7 @@ package com.knight.boot;
 
 import com.knight.boot.bean.Car;
 import com.knight.boot.bean.Person;
+import com.knight.boot.controller.BookController;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.ApplicationContext;
@@ -68,10 +69,24 @@ public class IOCTest {
 
     @DisplayName("自动装配autowire")
     @Test
-    public void test056() {
+    public void test06() {
         ApplicationContext ioc = new ClassPathXmlApplicationContext("ioc3.xml");
         Object person = ioc.getBean("person");
         System.out.println("自动装配autowire：" + person);
+    }
+
+
+    /**
+     * 1、组件id：默认为类名首字母小写；自定义——@Service("BookService")
+     * <p>
+     * 2、组件作用域：默认为单例 singleton；自定义——@Scope(value = "prototype")
+     */
+    @DisplayName("基于注解方式注入Bean")
+    @Test
+    public void test07() {
+        ApplicationContext ioc = new ClassPathXmlApplicationContext("ioc4.xml");
+        BookController bookController = (BookController) ioc.getBean("bookController");
+        bookController.getBook();
     }
 
 }
