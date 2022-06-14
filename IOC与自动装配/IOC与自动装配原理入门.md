@@ -1,6 +1,6 @@
 # IOC与自动装配原理入门
 
-### 反射
+- [官方文档](https://docs.spring.io/spring-framework/docs/current/reference/html/core.html#beans-introduction)
 
 ### IOC的基本使用
 
@@ -61,7 +61,7 @@
 
 ##### 一些细节
 
-- scope：
+- [Bean Scopes](https://docs.spring.io/spring-framework/docs/current/reference/html/core.html#beans-factory-scopes)：
   - prototype：多实例
     1、容器启动默认不会去创建实例bean
     2、获取的时候创建这个bean
@@ -237,6 +237,10 @@ public class BookService {
   
   - 注入普通类型属性
 
+- [@Primary](https://docs.spring.io/spring-framework/docs/current/reference/html/core.html#beans-autowired-annotation-primary)
+  
+  - 当有多个相同类型的Bean匹配时，优先注入该注解修饰的Bean
+
 - @Autowired 与 @Resource 的区别
   
   - @Autowired：功能强大，是Spring自己的注解
@@ -314,10 +318,8 @@ public class TeacherService extends BaseService<Teacher> {
     @Test
     public void test08() {
         ApplicationContext ioc = new ClassPathXmlApplicationContext("ioc4.xml");
-
         StudentService studentService = ioc.getBean(StudentService.class);
         studentService.work();
-
         System.out.println();
         TeacherService teacherService = ioc.getBean(TeacherService.class);
         teacherService.work();
@@ -326,7 +328,7 @@ public class TeacherService extends BaseService<Teacher> {
     /**
     com.knight.boot.generics.dao.StudentDao@8519cb4
     Student doing homework...
-     
+
     com.knight.boot.generics.dao.TeacherDao@35dab4eb
     Teacher teaching...
     **/
@@ -337,5 +339,75 @@ public class TeacherService extends BaseService<Teacher> {
 ### IOC原理
 
 ##### Bean的生命周期
+
+<p align="center">
+        <img src="img/003.png" width="350" align=center  />
+</p>
+
+- Bean生命周期阶段
+  1、通过无参构造器创建Bean实例
+  2、调用setter方法为Bean的属性赋值和对其他Bean的引用
+  3、调用Bean的初始化方法（需要配置初始化方法）
+  4、从容器中获取Bean对象，开始使用
+  5、在容器关闭时，调用销毁Bean的方法（需要配置销毁方法）
+
+```java
+public class User {
+
+    private String username;
+
+    public User() {
+        System.out.println("第一步...执行无参构造器创建Bean实例");
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+        System.out.println("第二步...调用setter方法为属性赋值");
+    }
+
+    public void initMethod() {
+        System.out.println("第三步...调用初始化方法");
+    }
+
+    public void destroyMethod() {
+        System.out.println("第五步...调用销毁方法");
+    }
+}
+```
+
+```xml
+    <bean id="user" class="com.knight.boot.bean.User" init-method="initMethod" destroy-method="destroyMethod">
+        <property name="username" value="admin"></property>
+    </bean>
+```
+
+- [后置处理器 BeanPostProcessor](https://docs.spring.io/spring-framework/docs/current/reference/html/core.html#beans-factory-extension-bpp)
+  - 通过实现BeanPostProcessor接口，在Bean初始化前后执行一些自定义的逻辑
+
+```java
+public class BeanPostProcessorImp implements BeanPostProcessor {
+
+    @Override
+    public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
+        System.out.println("后置处理器...初始化前执行");
+        return bean;
+    }
+
+    @Override
+    public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
+        System.out.println("后置处理器...初始化后执行");
+        return bean;
+    }
+}
+```
+
+```xml
+<!-- 配置后置处理器 -->
+<bean id="beanPostProcessorImp" class="com.knight.boot.bean.BeanPostProcessorImp"></bean>
+```
+
+##### 循环依赖
+
+##### 源码流程
 
 ### SpringBoot 自动装配原理入门

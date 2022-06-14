@@ -105,4 +105,15 @@ public class IOCTest {
         teacherService.work();
     }
 
+
+    @DisplayName("生命周期演示")
+    @Test
+    public void test09() {
+        ApplicationContext ioc = new ClassPathXmlApplicationContext("ioc5.xml");
+        Object user = ioc.getBean("user");
+        System.out.println("第四步...创建Bean实例对象：" + user);
+        // 关闭容器，销毁所有Bean实例
+        ((ClassPathXmlApplicationContext) ioc).close();
+    }
+
 }
