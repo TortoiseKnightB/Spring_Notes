@@ -1,10 +1,10 @@
 # IOC与自动装配原理入门
 
-- [官方文档](https://docs.spring.io/spring-framework/docs/current/reference/html/core.html#beans-introduction)
+- [IOC官方文档](https://docs.spring.io/spring-framework/docs/current/reference/html/core.html#beans-introduction)
 
-### IOC的基本使用
+## IOC的基本使用
 
-##### IOC
+### IOC
 
 - 以前是自己new 对象，现在所有的对象交给容器创建；给容器中注册组件
 
@@ -59,7 +59,7 @@
 - ioc.xml：配置文件，包含了组件（myPerson、myCar）的赋值和依赖关系
 - ApplicationContext：代表ioc容器，管理配置文件中的所有组件
 
-##### 一些细节
+### 一些细节
 
 - [Bean Scopes](https://docs.spring.io/spring-framework/docs/current/reference/html/core.html#beans-factory-scopes)：
   - prototype：多实例
@@ -71,9 +71,9 @@
     2、任何时候获取都是之前创建好的那个对象
 - ioc容器在创建组件对象的时候，(property)会利用setter方法为组件的属性进行赋值；
 
-##### 通过工厂模式管理Bean
+### 通过工厂模式管理Bean
 
-- 自定义工厂类——静态工厂
+#### 自定义工厂类——静态工厂
 
 ```java
 public class CarStaticFactory {
@@ -93,7 +93,7 @@ public class CarStaticFactory {
     </bean>
 ```
 
-- 自定义工厂类——实例工厂
+#### 自定义工厂类——实例工厂
 
 ```java
 public class CarInsanceFactory {
@@ -115,7 +115,7 @@ public class CarInsanceFactory {
     </bean>
 ```
 
-- 实现FactoryBean接口
+#### 实现FactoryBean接口
 
 <p align="center">
         <img src="img/001.png" width="600" align=center  />
@@ -153,7 +153,7 @@ public class CarFactoryBeanImp implements FactoryBean<Car> {
 - ioc容器启动时不会创建实例
 - 无论单实例还是多实例，都是在获取的时候创建对象
 
-##### 自动装配autowire
+### 自动装配autowire
 
 ```xml
     <!-- Car{price=50000.0, color='Red'}-->
@@ -184,7 +184,7 @@ public class CarFactoryBeanImp implements FactoryBean<Car> {
   - 如果按参数类型找到多个，以参数名作为id继续匹配，不会报错
   - 若字段为List类型，容器中符合的组件全部装进去
 
-##### 基于注解的使用
+### 基于注解的使用
 
 - 通过给bean上添加一下任意一个注解，可以快速将bean加入到ioc容器中
   1、@Controller：控制器层组件注解
@@ -249,7 +249,7 @@ public class BookService {
   
   - @Resource 扩展性强，是java的标准，切换成其他的容器框架后可以继续使用
 
-##### 泛型依赖注入
+### 泛型依赖注入
 
 - 子类之间的依赖关系由其父类泛型以及父类之间的依赖关系来确定，父类的泛型必须为同一类型。即**通过带泛型的父类类型确定注入的子类**
 
@@ -336,9 +336,9 @@ public class TeacherService extends BaseService<Teacher> {
 
 - 优点：代码精简，将可重用的代码全部放在一个类之中，方便维护和修改，增加代码的复用性
 
-### IOC原理
+## IOC原理
 
-##### Bean的生命周期
+### Bean的生命周期
 
 <p align="center">
         <img src="img/003.png" width="350" align=center  />
@@ -406,8 +406,10 @@ public class BeanPostProcessorImp implements BeanPostProcessor {
 <bean id="beanPostProcessorImp" class="com.knight.boot.bean.BeanPostProcessorImp"></bean>
 ```
 
-##### 循环依赖
+- 此外常见的还有：InitializingBean接口、DisposableBean接口，@PostConstruct、@PreDestroy（更多内容请参考[官方文档](https://docs.spring.io/spring-framework/docs/current/reference/html/core.html#beans-factory-lifecycle-combined-effects)）
 
-##### 源码流程
+### 循环依赖
 
-### SpringBoot 自动装配原理入门
+### 源码流程
+
+## SpringBoot 自动装配原理入门
