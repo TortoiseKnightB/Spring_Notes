@@ -4,7 +4,7 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
 
-    <bean id="car" class="com.knight.boot.bean.Car">
+    <bean id="car" class="com.knight.ioc.bean.Car">
         <property name="price" value="50000.0"></property>
         <property name="color" value="Red"></property>
     </bean>
@@ -21,7 +21,7 @@
                             不会报错
             若字段为List类型，容器中符合的组件全部装进去
     -->
-    <bean id="person" class="com.knight.boot.bean.Person" autowire="byName">
+    <bean id="person" class="com.knight.ioc.bean.Person" autowire="byName">
         <property name="name" value="张三"></property>
         <property name="age" value="18"></property>
     </bean>

@@ -17,7 +17,7 @@
                 1、在容器启动完成之前已经创建好对象，保存在容器中
                 2、任何时候获取都是之前创建好的那个对象
     -->
-    <bean id="myPerson" class="com.knight.boot.bean.Person" scope="singleton">
+    <bean id="myPerson" class="com.knight.ioc.bean.Person" scope="singleton">
         <!-- 使用property标签为Person对象的属性赋值 -->
         <property name="name" value="李四"></property>
         <property name="age" value="24"></property>
@@ -25,7 +25,7 @@
         <property name="car" ref="myCar"></property>
     </bean>
 
-    <bean id="myCar" class="com.knight.boot.bean.Car">
+    <bean id="myCar" class="com.knight.ioc.bean.Car">
         <property name="price" value="50000.0"></property>
         <property name="color" value="Red"></property>
     </bean>

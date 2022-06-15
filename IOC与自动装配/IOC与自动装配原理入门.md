@@ -1,4 +1,4 @@
-# IOC与自动装配原理入门
+# Spring IOC容器技术原理入门
 
 - [IOC官方文档](https://docs.spring.io/spring-framework/docs/current/reference/html/core.html#beans-introduction)
 
@@ -44,16 +44,16 @@
 
 ```xml
     <!-- ioc.xml 基于xml配置文件方式实现组件管理 -->
-    <bean id="myPerson" class="com.knight.boot.bean.Person" scope="singleton">
-        <property name="name" value="李四"></property>
-        <property name="age" value="24"></property>
-        <property name="car" ref="myCar"></property>
-    </bean>
+<bean id="myPerson" class="com.knight.ioc.bean.Person" scope="singleton">
+  <property name="name" value="李四"></property>
+  <property name="age" value="24"></property>
+  <property name="car" ref="myCar"></property>
+</bean>
 
-    <bean id="myCar" class="com.knight.boot.bean.Car">
-        <property name="price" value="50000.0"></property>
-        <property name="color" value="Red"></property>
-    </bean>
+<bean id="myCar" class="com.knight.ioc.bean.Car">
+<property name="price" value="50000.0"></property>
+<property name="color" value="Red"></property>
+</bean>
 ```
 
 - ioc.xml：配置文件，包含了组件（myPerson、myCar）的赋值和依赖关系
@@ -87,10 +87,10 @@ public class CarStaticFactory {
 
 ```xml
     <!-- 静态工厂 -->
-    <bean id="car01" class="com.knight.boot.factory.CarStaticFactory" factory-method="getCar">
-        <constructor-arg name="price" value="50000"></constructor-arg>
-        <constructor-arg name="color" value="Blue"></constructor-arg>
-    </bean>
+<bean id="car01" class="com.knight.ioc.factory.CarStaticFactory" factory-method="getCar">
+  <constructor-arg name="price" value="50000"></constructor-arg>
+  <constructor-arg name="color" value="Blue"></constructor-arg>
+</bean>
 ```
 
 #### 自定义工厂类——实例工厂
@@ -107,12 +107,12 @@ public class CarInsanceFactory {
 
 ```xml
     <!-- 实例工厂 -->
-    <bean id="carInsanceFactory" class="com.knight.boot.factory.CarInsanceFactory"></bean>
-    <bean id="car02" class="com.knight.boot.bean.Car" factory-bean="carInsanceFactory"
-          factory-method="getCar">
-        <constructor-arg name="price" value="80000"></constructor-arg>
-        <constructor-arg name="color" value="Red"></constructor-arg>
-    </bean>
+<bean id="carInsanceFactory" class="com.knight.ioc.factory.CarInsanceFactory"></bean>
+<bean id="car02" class="com.knight.ioc.bean.Car" factory-bean="carInsanceFactory"
+      factory-method="getCar">
+<constructor-arg name="price" value="80000"></constructor-arg>
+<constructor-arg name="color" value="Red"></constructor-arg>
+</bean>
 ```
 
 #### 实现FactoryBean接口
@@ -147,7 +147,7 @@ public class CarFactoryBeanImp implements FactoryBean<Car> {
 ```
 
 ```xml
-<bean id="carFactoryBeanImp" class="com.knight.boot.factory.CarFactoryBeanImp"></bean>
+<bean id="carFactoryBeanImp" class="com.knight.ioc.factory.CarFactoryBeanImp"></bean>
 ```
 
 - ioc容器启动时不会创建实例
@@ -157,17 +157,17 @@ public class CarFactoryBeanImp implements FactoryBean<Car> {
 
 ```xml
     <!-- Car{price=50000.0, color='Red'}-->
-    <bean id="car" class="com.knight.boot.bean.Car">
-        <property name="price" value="50000.0"></property>
-        <property name="color" value="Red"></property>
-    </bean>
+<bean id="car" class="com.knight.ioc.bean.Car">
+  <property name="price" value="50000.0"></property>
+  <property name="color" value="Red"></property>
+</bean>
 
-    <!-- Person{name='张三', age=18, car=Car{price=50000.0, color='Red'}} -->
-    <!-- Car通过自动装配规则自动赋值给Person -->
-    <bean id="person" class="com.knight.boot.bean.Person" autowire="byName">
-        <property name="name" value="张三"></property>
-        <property name="age" value="18"></property>
-    </bean>
+        <!-- Person{name='张三', age=18, car=Car{price=50000.0, color='Red'}} -->
+        <!-- Car通过自动装配规则自动赋值给Person -->
+<bean id="person" class="com.knight.ioc.bean.Person" autowire="byName">
+<property name="name" value="张三"></property>
+<property name="age" value="18"></property>
+</bean>
 ```
 
 - 自动装配规则
@@ -326,10 +326,10 @@ public class TeacherService extends BaseService<Teacher> {
     }
 
     /**
-    com.knight.boot.generics.dao.StudentDao@8519cb4
+    com.knight.ioc.generics.dao.StudentDao@8519cb4
     Student doing homework...
 
-    com.knight.boot.generics.dao.TeacherDao@35dab4eb
+    com.knight.ioc.generics.dao.TeacherDao@35dab4eb
     Teacher teaching...
     **/
 ```
@@ -376,9 +376,9 @@ public class User {
 ```
 
 ```xml
-    <bean id="user" class="com.knight.boot.bean.User" init-method="initMethod" destroy-method="destroyMethod">
-        <property name="username" value="admin"></property>
-    </bean>
+<bean id="user" class="com.knight.ioc.bean.User" init-method="initMethod" destroy-method="destroyMethod">
+  <property name="username" value="admin"></property>
+</bean>
 ```
 
 - [后置处理器 BeanPostProcessor](https://docs.spring.io/spring-framework/docs/current/reference/html/core.html#beans-factory-extension-bpp)
@@ -403,13 +403,36 @@ public class BeanPostProcessorImp implements BeanPostProcessor {
 
 ```xml
 <!-- 配置后置处理器 -->
-<bean id="beanPostProcessorImp" class="com.knight.boot.bean.BeanPostProcessorImp"></bean>
+<bean id="beanPostProcessorImp" class="com.knight.ioc.bean.BeanPostProcessorImp"></bean>
 ```
 
 - 此外常见的还有：InitializingBean接口、DisposableBean接口，@PostConstruct、@PreDestroy（更多内容请参考[官方文档](https://docs.spring.io/spring-framework/docs/current/reference/html/core.html#beans-factory-lifecycle-combined-effects)）
 
 ### 循环依赖
 
+#### 没有循环依赖的情况下
+
+##### 存在简单循环依赖
+
+##### 存在多个循环依赖
+
+- 一级缓存，存放成品Bean，即完成实例化、属性赋值、初始化的Bean对象
+- 二级缓存用来存放半成品，即已经完成实例化，但是没有属性赋值的Bean对象。只有存在循环依赖才会使用二级缓存，否则不会用二级缓存
+- 三级缓存，存放Bena工厂（函数式接口）
+
+#### 为什么不用二级缓存
+
+- 设计模式6大原则之一，单一职责原则。否则，耦合度变高
+- 在多线程并发的情况下，会导致前后两次取出的对象不一致。spring设计成三级缓存，确保每次去缓存取对象时，确保是同一个对象
+
 ### 源码流程
+
+从一级缓存中拿取 Object sharedInstance = getSingleton(beanName);
+
+
+
+三级缓存 DefaultSingletonBeanRegistry#singletonObjects、singletonFactories、earlySingletonObjects
+
+
 
 ## SpringBoot 自动装配原理入门
