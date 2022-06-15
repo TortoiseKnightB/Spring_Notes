@@ -1,10 +1,10 @@
-# Spring IOC容器技术原理入门
+# Spring IOC容器原理入门
 
 - [IOC官方文档](https://docs.spring.io/spring-framework/docs/current/reference/html/core.html#beans-introduction)
 
 ## IOC的基本使用
 
-### IOC
+### IOC简单示例
 
 - 以前是自己new 对象，现在所有的对象交给容器创建；给容器中注册组件
 
@@ -43,16 +43,16 @@
 ```
 
 ```xml
-    <!-- ioc.xml 基于xml配置文件方式实现组件管理 -->
+<!-- ioc.xml 基于xml配置文件方式实现组件管理 -->
 <bean id="myPerson" class="com.knight.ioc.bean.Person" scope="singleton">
-  <property name="name" value="李四"></property>
-  <property name="age" value="24"></property>
-  <property name="car" ref="myCar"></property>
+      <property name="name" value="李四"></property>
+      <property name="age" value="24"></property>
+      <property name="car" ref="myCar"></property>
 </bean>
 
 <bean id="myCar" class="com.knight.ioc.bean.Car">
-<property name="price" value="50000.0"></property>
-<property name="color" value="Red"></property>
+    <property name="price" value="50000.0"></property>
+    <property name="color" value="Red"></property>
 </bean>
 ```
 
@@ -201,6 +201,12 @@ public class CarFactoryBeanImp implements FactoryBean<Car> {
     -->
     <context:component-scan base-package="com.knight">
     </context:component-scan>
+```
+
+或者实现一个配置类
+
+```java
+a
 ```
 
 - 实现属性注入
@@ -408,7 +414,7 @@ public class BeanPostProcessorImp implements BeanPostProcessor {
 
 - 此外常见的还有：InitializingBean接口、DisposableBean接口，@PostConstruct、@PreDestroy（更多内容请参考[官方文档](https://docs.spring.io/spring-framework/docs/current/reference/html/core.html#beans-factory-lifecycle-combined-effects)）
 
-### 循环依赖
+### 三级缓存与循环依赖
 
 #### 没有循环依赖的情况下
 
@@ -429,10 +435,6 @@ public class BeanPostProcessorImp implements BeanPostProcessor {
 
 从一级缓存中拿取 Object sharedInstance = getSingleton(beanName);
 
-
-
 三级缓存 DefaultSingletonBeanRegistry#singletonObjects、singletonFactories、earlySingletonObjects
-
-
 
 ## SpringBoot 自动装配原理入门
