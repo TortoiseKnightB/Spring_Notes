@@ -1,8 +1,8 @@
-package com.knight.lifecycle.bean.impl;
+package com.knight.reference.bean.impl;
 
-import com.knight.lifecycle.bean.UserDao;
-import com.knight.lifecycle.bean.UserZao;
-import com.knight.lifecycle.bean.UserService;
+import com.knight.reference.bean.UserDao;
+import com.knight.reference.bean.UserService;
+import com.knight.reference.bean.UserZao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

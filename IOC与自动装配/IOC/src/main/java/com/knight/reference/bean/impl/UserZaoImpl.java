@@ -1,6 +1,6 @@
-package com.knight.lifecycle.bean.impl;
+package com.knight.reference.bean.impl;
 
-import com.knight.lifecycle.bean.UserZao;
+import com.knight.reference.bean.UserZao;
 import org.springframework.stereotype.Service;
 
 @Service

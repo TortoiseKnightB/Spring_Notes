@@ -1,4 +1,4 @@
-package com.knight.lifecycle.bean;
+package com.knight.reference.bean;
 
 public interface UserDao {
 

@@ -1,9 +1,9 @@
-package com.knight.lifecycle.bean2;
+package com.knight.reference.bean4;
 
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@ComponentScan(basePackages = {"com.knight.lifecycle.bean2"})
-public class SpringConfig2 {
+@ComponentScan(basePackages = {"com.knight.reference.bean4"})
+public class SpringConfig4 {
 }

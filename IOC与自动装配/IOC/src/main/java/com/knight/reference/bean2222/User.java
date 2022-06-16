@@ -1,4 +1,4 @@
-package com.knight.lifecycle.bean2;
+package com.knight.reference.bean2222;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

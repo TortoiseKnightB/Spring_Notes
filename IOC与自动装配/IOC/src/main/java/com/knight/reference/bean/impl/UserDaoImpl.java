@@ -1,6 +1,6 @@
-package com.knight.lifecycle.bean.impl;
+package com.knight.reference.bean.impl;
 
-import com.knight.lifecycle.bean.UserDao;
+import com.knight.reference.bean.UserDao;
 import org.springframework.stereotype.Repository;
 
 @Repository
