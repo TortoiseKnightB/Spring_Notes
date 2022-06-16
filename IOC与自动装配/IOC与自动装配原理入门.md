@@ -504,13 +504,114 @@ public class BeanPostProcessorImp implements BeanPostProcessor {
         <img src="img/005.png" width="250" align=center  />
 </p>
 
-- 循环依赖的种类
+- 循环依赖的几种情况
   
-  1. 构造器参数循环依赖
+  1. 构造器参数循环依赖（报错，可以使用@Lazy注解解决）
   
-  2. 单例setter注入循环依赖
+  ```java
+  @Component
+  public class A1 {
   
-  3. 多例setter注入循环依赖
+    private B1 b;
+  
+    @Autowired
+    public A1(B1 b) {
+        this.b = b;
+    }
+  }
+  ```
+  
+  ```java
+  @Component
+  public class B1 {
+  
+    private A1 a;
+  
+    @Autowired
+    public B1(A1 a) {
+         this.a = a;
+    }
+  }
+  ```
+  
+  2. 单例setter注入循环依赖（不报错，Spring自动处理这种情况）
+  
+  ```java
+  @Component
+  @Scope(value = "singleton")
+  public class A2 {
+  
+    private B2 b;
+  
+    @Autowired
+    public void setB(B2 b) {
+        this.b = b;
+    }
+  }
+  ```
+  
+  ```java
+  @Component
+  @Scope(value = "singleton")
+  public class B2 {
+  
+    private A2 a;
+  
+    @Autowired
+    public void setA(A2 a) {
+        this.a = a;
+    }
+  }
+  ```
+  
+  3. 多例setter注入循环依赖（报错）
+  
+  ```java
+  @Component
+  @Scope(value = "prototype")
+  public class A3 {
+    private B3 b;
+  
+    @Autowired
+    public void setB(B3 b) {
+        this.b = b;
+    }
+  }
+  ```
+  
+  ```java
+  @Component
+  @Scope(value = "prototype")
+  public class B3 {
+  
+    private A3 a;
+  
+    @Autowired
+    public void setA(A3 a) {
+        this.a = a;
+    }
+  }
+  ```
+  
+  4. @Autowired属性注入（单例模式下不报错，多例模式下报错）
+  
+  ```java
+  @Component
+  public class A4 {
+  
+    @Autowired
+    B4 b;
+  }
+  ```
+  
+  ```java
+  @Component
+  public class B4 {
+  
+    @Autowired
+    A4 a;
+  }
+  ```
 
 - 创建Bean的三个重要步骤
   

@@ -16,6 +16,9 @@ import com.knight.reference.bean3.SpringConfig3;
 import com.knight.reference.bean4.A4;
 import com.knight.reference.bean4.B4;
 import com.knight.reference.bean4.SpringConfig4;
+import com.knight.reference.bean5_no_cr.A5;
+import com.knight.reference.bean5_no_cr.B5;
+import com.knight.reference.bean5_no_cr.SpringConfig5;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.ApplicationContext;
@@ -55,7 +58,7 @@ public class ReferenceTest {
         System.out.println(b);
     }
 
-    @DisplayName("多例setter注入循环依赖")
+    @DisplayName("属性注入循环依赖")
     @Test
     public void test04() {
         ApplicationContext ioc = new AnnotationConfigApplicationContext(SpringConfig4.class);
@@ -64,6 +67,39 @@ public class ReferenceTest {
         System.out.println(a);
         System.out.println(b);
     }
+
+    @DisplayName("无循环依赖情况")
+    @Test
+    public void test05() {
+        ApplicationContext ioc = new AnnotationConfigApplicationContext(SpringConfig5.class);
+        A5 a = ioc.getBean(A5.class);
+        B5 b = ioc.getBean(B5.class);
+        System.out.println(a);
+        System.out.println(b);
+    }
+
+
+    
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
