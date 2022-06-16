@@ -711,9 +711,11 @@ public class BeanPostProcessorImp implements BeanPostProcessor {
 
 ##### 存在循环依赖的创建流程
 
+<p align="center">
+        <img src="img/016.png" width="600" align=center  />
+</p>
 
-
-
+- 创建B的时候需要注入属性A，这个时候A工厂已经放入三级缓存，可以从三级缓存中取出A工厂，生成A的对象。并将A对象放入二级缓存，同时移除三级缓存的A工厂
 
 ------
 

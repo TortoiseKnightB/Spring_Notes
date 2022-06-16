@@ -1,15 +1,11 @@
 package com.knight.reference;
 
-import com.knight.reference.bean.SpringConfig;
-import com.knight.reference.bean.UserService;
 import com.knight.reference.bean1.A1;
 import com.knight.reference.bean1.B1;
 import com.knight.reference.bean1.SpringConfig1;
 import com.knight.reference.bean2.A2;
 import com.knight.reference.bean2.B2;
 import com.knight.reference.bean2.SpringConfig2;
-import com.knight.reference.bean2222.Person;
-import com.knight.reference.bean2222.User;
 import com.knight.reference.bean3.A3;
 import com.knight.reference.bean3.B3;
 import com.knight.reference.bean3.SpringConfig3;
@@ -19,6 +15,9 @@ import com.knight.reference.bean4.SpringConfig4;
 import com.knight.reference.bean5_no_cr.A5;
 import com.knight.reference.bean5_no_cr.B5;
 import com.knight.reference.bean5_no_cr.SpringConfig5;
+import com.knight.reference.bean6_cr.A6;
+import com.knight.reference.bean6_cr.B6;
+import com.knight.reference.bean6_cr.SpringConfig6;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.ApplicationContext;
@@ -78,54 +77,14 @@ public class ReferenceTest {
         System.out.println(b);
     }
 
-
-    
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    @DisplayName("循环依赖情况流程演示")
     @Test
-    public void test011() {
-        ApplicationContext ioc = new AnnotationConfigApplicationContext(SpringConfig.class);
-        UserService userService = ioc.getBean(UserService.class);
-        System.out.println(userService);
+    public void test06() {
+        ApplicationContext ioc = new AnnotationConfigApplicationContext(SpringConfig6.class);
+        A6 a = ioc.getBean(A6.class);
+        B6 b = ioc.getBean(B6.class);
+        a.say();
+        b.say();
     }
 
-    @Test
-    public void test022() {
-        ApplicationContext ioc = new AnnotationConfigApplicationContext(SpringConfig2.class);
-        User user = ioc.getBean(User.class);
-        Person person = ioc.getBean(Person.class);
-        System.out.println(user);
-        System.out.println(person);
-    }
 }
