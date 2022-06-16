@@ -490,6 +490,8 @@ public class BeanPostProcessorImp implements BeanPostProcessor {
 
 ### 三级缓存与循环依赖
 
+#### 循环依赖简介
+
 - **循环依赖**：一个或多个对象实例之间存在直接或间接的依赖关系，这种依赖关系构成了一个环形调用
 
 - 直接依赖：A依赖B，B依赖A
@@ -534,7 +536,7 @@ public class BeanPostProcessorImp implements BeanPostProcessor {
   }
   ```
   
-  2. 单例setter注入循环依赖（不报错，Spring自动处理这种情况）
+  2. 单例模式setter注入循环依赖（不报错，Spring自动处理这种情况）
   
   ```java
   @Component
@@ -564,12 +566,13 @@ public class BeanPostProcessorImp implements BeanPostProcessor {
   }
   ```
   
-  3. 多例setter注入循环依赖（报错）
+  3. 多例模式setter注入循环依赖（报错）
   
   ```java
   @Component
   @Scope(value = "prototype")
   public class A3 {
+  
     private B3 b;
   
     @Autowired
@@ -613,13 +616,9 @@ public class BeanPostProcessorImp implements BeanPostProcessor {
   }
   ```
 
-- 创建Bean的三个重要步骤
-  
-  - 实例化Bean：`createBeanInstance()`
-  
-  - 属性赋值：`populateBean()`
-  
-  - 初始化Bean：`initializeBean()`
+------
+
+#### Spring是如何解决循环依赖问题的？
 
 - 解决办法：三级缓存
   
@@ -629,11 +628,96 @@ public class BeanPostProcessorImp implements BeanPostProcessor {
   
   - 三级缓存：`Map<String, ObjectFactory<?>> singletonFactories`
 
-- 一级缓存，存放成品Bean，即完成实例化、属性赋值、初始化的Bean对象
+<p align="center">
+        <img src="img/006.png" width="600" align=center  />
+</p>
 
-- 二级缓存用来存放半成品，即已经完成实例化，但是没有属性赋值的Bean对象。只有存在循环依赖才会使用二级缓存，否则不会用二级缓存
+- 一级缓存，存放成品Bean。即完成实例化、属性赋值、初始化的Bean对象
+
+- 二级缓存用来存放半成品。即已经完成实例化，但是没有属性赋值的Bean对象（只有存在循环依赖才会使用二级缓存，否则不会用二级缓存）
 
 - 三级缓存，存放Bean工厂（函数式接口）
+
+<p align="center">
+        <img src="img/007.png" width="600" align=center  />
+</p>
+
+------
+
+#### Bean的创建流程
+
+（平常使用主要为singleton单例模式，因此以该模式进行分析）
+
+- 创建Bean的三个重要步骤
+  
+  - 实例化Bean：`createBeanInstance()`
+  
+  - 属性赋值：`populateBean()`
+  
+  - 初始化Bean：`initializeBean()`
+
+##### 没有循环依赖情况的创建流程
+
+<p align="center">
+        <img src="img/008.png" width="600" align=center  />
+</p>
+
+- 创建Bean的细节：`getBean(beanName);`
+
+<p align="center">
+        <img src="img/009.png" width="600" align=center  />
+</p>
+
+- 进入`doGetBean()`，遇到第一个`getSingleton()`，尝试从一级缓存中Bean，发现一级缓存中没有，返回null
+
+<p align="center">
+        <img src="img/010.png" width="600" align=center  />
+</p>
+
+- 调用`getDependsOn()`查看是否有被依赖的Bean，如果有，优先注入
+- 然后遇到第二个`getSingleton()`，该方法传入了一个函数式接口，用来创建Bean对象
+
+<p align="center">
+        <img src="img/011.png" width="600" align=center  />
+</p>
+
+- 调用函数式接口中`getOject()`方法，即传入的`createBean()`方法，开始创建Bean对象
+
+<p align="center">
+        <img src="img/012.png" width="600" align=center  />
+</p>
+
+- 在`AbstractAutowireCapableBeanFactory`类的`doCreateBean`方法中，调用`populateBean()`，对A进行属性赋值，同时开启B的创建过程。在B创建完成后，对A进行初始化
+
+<p align="center">
+        <img src="img/013.png" width="600" align=center  />
+</p>
+
+- 在属性赋值过程中，调用`InjectionMetadata`类的`initializeBean()`方法获取到类A需要赋值的属性，循环遍历依次注入
+
+<p align="center">
+        <img src="img/014.png" width="600" align=center  />
+</p>
+
+- 在初始化过程中，调用`AbstractAutowireCapableBeanFactory`类的`initializeBean()`方法，实现A的初始化、后置处理器 `BeanPostProcessor`的流程
+
+<p align="center">
+        <img src="img/015.png" width="600" align=center  />
+</p>
+
+- A对象初始化完成后，调用`addSingleton()`，将A加入一级缓存，移出二、三级缓存，A对象创建完成
+
+------
+
+##### 存在循环依赖的创建流程
+
+
+
+
+
+------
+
+#### 为什么不用二级缓存
 
 - 为什么不能解决构造器注入的循环依赖
   
@@ -643,15 +727,8 @@ public class BeanPostProcessorImp implements BeanPostProcessor {
 
 - 如果只有一级缓存，能不能解决循环依赖问题
 
-#### 没有循环依赖的情况下
-
-##### 存在简单循环依赖
-
-##### 存在多个循环依赖
-
-#### 为什么不用二级缓存
-
 - 设计模式6大原则之一，单一职责原则。否则，耦合度变高
+
 - 在多线程并发的情况下，会导致前后两次取出的对象不一致。spring设计成三级缓存，确保每次去缓存取对象时，确保是同一个对象
 
 ### 源码流程

@@ -68,7 +68,7 @@ public class ReferenceTest {
         System.out.println(b);
     }
 
-    @DisplayName("无循环依赖情况")
+    @DisplayName("无循环依赖情况流程演示")
     @Test
     public void test05() {
         ApplicationContext ioc = new AnnotationConfigApplicationContext(SpringConfig5.class);
