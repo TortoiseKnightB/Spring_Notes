@@ -3,8 +3,9 @@ spring:
     url: jdbc:mysql://alicloud:3306/mybatis?serverTimezone=UTC&allowMultiQueries=true
     username: root
     password: 123456Ben
-#    type: com.zaxxer.hikari.HikariDataSource
+    #    type: com.zaxxer.hikari.HikariDataSource
     driver-class-name: com.mysql.cj.jdbc.Driver
+  #    filters: stat,wall # MyDataSourceConfig中的自定义配置
 
   jdbc:
     template:

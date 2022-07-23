@@ -22,13 +22,14 @@ class Boot06DataApplicationTest {
 
     @DisplayName("JDBC连接")
     @Test
-    void contextLoads() {
+    void test01() {
         Long aLong = jdbcTemplate.queryForObject("SELECT count(*) FROM mybatis.t_cat;", Long.class);
         log.info("记录总数：{}", aLong);
     }
 
+    @DisplayName("自定义数据源")
     @Test
-    void test01() {
+    void test02() {
         log.info("数据源类型：{}", dataSource.getClass());
     }
 
