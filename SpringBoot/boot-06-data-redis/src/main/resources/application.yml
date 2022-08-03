@@ -1,0 +1,3 @@
+spring:
+  redis:
+    url: redis://user:password@example.com:6379
