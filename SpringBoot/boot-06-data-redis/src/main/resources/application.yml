@@ -1,3 +1,5 @@
 spring:
   redis:
-    url: redis://user:password@example.com:6379
+    host: alicloud
+    port: 6379
+    password: 123456Ben

@@ -1,6 +1,7 @@
 package com.knight.boot.config;
 
-import com.knight.boot.converter.KnightMessageConverter;
+//import com.knight.boot.converter.KnightMessageConverter;
+//import com.knight.boot.interceptor.LoginInterceptor;
 import com.knight.boot.interceptor.LoginInterceptor;
 import org.springframework.boot.autoconfigure.web.servlet.WebMvcRegistrations;
 import org.springframework.context.annotation.Bean;
@@ -20,41 +21,41 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-//@EnableWebMvc
+@EnableWebMvc // 启动开关
 @Configuration(proxyBeanMethods = false)
 public class WebConfig implements WebMvcConfigurer {
 
-    @Override
-    public void configurePathMatch(PathMatchConfigurer configurer) {
-
-        UrlPathHelper urlPathHelper = new UrlPathHelper();
-        // 设置不移除分号（;）后面的内容，矩阵变量可以生效。基本没有，参考一下这个自定义的思路
-        urlPathHelper.setRemoveSemicolonContent(false);
-        configurer.setUrlPathHelper(urlPathHelper);
-    }
-
-
-    // 自定义 MessageConverter
-    @Override
-    public void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
-        converters.add(new KnightMessageConverter());
-    }
-
-
-    // 自定义内容协商策略
-    @Override
-    public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
-        Map<String, MediaType> mediaTypes = new HashMap<>();
-        mediaTypes.put("json", MediaType.APPLICATION_JSON);
-        mediaTypes.put("xml", MediaType.APPLICATION_ATOM_XML);
-        mediaTypes.put("tk", MediaType.parseMediaType("application/t-knight"));
-        // 指定支持解析哪些参数对应的哪些媒体类型
-        ParameterContentNegotiationStrategy parameterContentNegotiationStrategy = new ParameterContentNegotiationStrategy(mediaTypes);
-
-        HeaderContentNegotiationStrategy headerContentNegotiationStrategy = new HeaderContentNegotiationStrategy();
-        // 这个会取消掉默认的其他内容协商策略，可以尝试 configurer.mediaType()
-        configurer.strategies(Arrays.asList(parameterContentNegotiationStrategy, headerContentNegotiationStrategy));
-    }
+//    @Override
+//    public void configurePathMatch(PathMatchConfigurer configurer) {
+//
+//        UrlPathHelper urlPathHelper = new UrlPathHelper();
+//        // 设置不移除分号（;）后面的内容，矩阵变量可以生效。基本没有，参考一下这个自定义的思路
+//        urlPathHelper.setRemoveSemicolonContent(false);
+//        configurer.setUrlPathHelper(urlPathHelper);
+//    }
+//
+//
+//    // 自定义 MessageConverter
+//    @Override
+//    public void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
+//        converters.add(new KnightMessageConverter());
+//    }
+//
+//
+//    // 自定义内容协商策略
+//    @Override
+//    public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
+//        Map<String, MediaType> mediaTypes = new HashMap<>();
+//        mediaTypes.put("json", MediaType.APPLICATION_JSON);
+//        mediaTypes.put("xml", MediaType.APPLICATION_ATOM_XML);
+//        mediaTypes.put("tk", MediaType.parseMediaType("application/t-knight"));
+//        // 指定支持解析哪些参数对应的哪些媒体类型
+//        ParameterContentNegotiationStrategy parameterContentNegotiationStrategy = new ParameterContentNegotiationStrategy(mediaTypes);
+//
+//        HeaderContentNegotiationStrategy headerContentNegotiationStrategy = new HeaderContentNegotiationStrategy();
+//        // 这个会取消掉默认的其他内容协商策略，可以尝试 configurer.mediaType()
+//        configurer.strategies(Arrays.asList(parameterContentNegotiationStrategy, headerContentNegotiationStrategy));
+//    }
 
 
     // 添加拦截器
@@ -74,24 +75,24 @@ public class WebConfig implements WebMvcConfigurer {
     }
 
 
-    @Bean
-    public WebMvcRegistrations webMvcRegistrations(){
-        return new WebMvcRegistrations() {
-
-            @Override
-            public RequestMappingHandlerMapping getRequestMappingHandlerMapping() {
-                return WebMvcRegistrations.super.getRequestMappingHandlerMapping();
-            }
-
-            @Override
-            public RequestMappingHandlerAdapter getRequestMappingHandlerAdapter() {
-                return WebMvcRegistrations.super.getRequestMappingHandlerAdapter();
-            }
-
-            @Override
-            public ExceptionHandlerExceptionResolver getExceptionHandlerExceptionResolver() {
-                return WebMvcRegistrations.super.getExceptionHandlerExceptionResolver();
-            }
-        };
-    }
+//    @Bean
+//    public WebMvcRegistrations webMvcRegistrations(){
+//        return new WebMvcRegistrations() {
+//
+//            @Override
+//            public RequestMappingHandlerMapping getRequestMappingHandlerMapping() {
+//                return WebMvcRegistrations.super.getRequestMappingHandlerMapping();
+//            }
+//
+//            @Override
+//            public RequestMappingHandlerAdapter getRequestMappingHandlerAdapter() {
+//                return WebMvcRegistrations.super.getRequestMappingHandlerAdapter();
+//            }
+//
+//            @Override
+//            public ExceptionHandlerExceptionResolver getExceptionHandlerExceptionResolver() {
+//                return WebMvcRegistrations.super.getExceptionHandlerExceptionResolver();
+//            }
+//        };
+//    }
 }

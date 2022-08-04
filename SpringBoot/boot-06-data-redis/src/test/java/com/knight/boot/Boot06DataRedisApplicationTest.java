@@ -21,7 +21,11 @@ class Boot06DataRedisApplicationTest {
     @Test
     void test01() {
         ValueOperations<String, String> operations = stringRedisTemplate.opsForValue();
-        operations.set("hello", "world");
+        operations.set("k3", "v3");
         System.out.println(operations.get("hello"));
+        System.out.println(operations.get("HELLO"));
+        System.out.println(operations.get("k1"));
+        System.out.println(operations.get("k2"));
+        System.out.println(operations.get("k3"));
     }
 }
