@@ -11,6 +11,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * {@link SpringBootTest @SpringBootTest}使得测试类可以使用{@link org.springframework.beans.factory.annotation.Autowired @Autowired}等Spring注解
+ * <p>
+ * <a href="https://junit.org/junit5/docs/current/user-guide/#writing-tests-parameterized-tests-sources-ValueSource">JUnit5文档</a>
  *
  * @author TortoiseKnightB
  * @date 2022/08/05
