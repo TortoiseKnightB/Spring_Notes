@@ -10,6 +10,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 /**
+ * {@link SpringBootTest @SpringBootTest}使得测试类可以使用{@link org.springframework.beans.factory.annotation.Autowired @Autowired}等Spring注解
+ *
  * @author TortoiseKnightB
  * @date 2022/08/05
  */
@@ -164,6 +166,18 @@ class Boot07TestApplicationTest {
     @Test
     public void shouldFail() {
         fail("快速失败");
+    }
+
+
+    /**
+     * 不满足的断言会使得测试方法失败，而不满足的前置条件只会使得测试方法的执行终止
+     */
+    @DisplayName("前置条件测试")
+    @Test
+    void testAssumptions() {
+        Assumptions.assumeTrue(true, "结果不是true");
+        System.out.println("。。。继续执行代码");
+        Assumptions.assumingThat(true, () -> System.out.println("。。。满足条件，输出该语句"));
     }
 
 
