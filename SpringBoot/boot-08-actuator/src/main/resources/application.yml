@@ -1,0 +1,27 @@
+# management是所有Actuator的配置
+management:
+  endpoints:
+    enabled-by-default: false # 暴露所有端点信息 true
+    web:
+      exposure:
+        include: '*'  # 以web方式暴露
+
+  # 配置具体端点的详细信息
+  endpoint:
+    health:
+      show-details: always
+      enabled: true
+    beans:
+      enabled: true
+    metrics:
+      enabled: true
+    info:
+      enabled: true
+    env:
+      enabled: true
+
+# 方式一：http://localhost:8080/actuator/env中搜索info查看
+info:
+  appName: boot-admin
+  appVersion: 1.0.0
+  mavenProjectName: @project.artifactId@

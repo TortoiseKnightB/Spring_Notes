@@ -1,0 +1,21 @@
+spring:
+  #  mvc:
+  #    static-path-pattern: /resources/**
+
+  web:
+    resources:
+      static-locations: classpath:/haha/
+
+  mvc:
+    contentnegotiation:
+      favor-parameter: true #开启请求参数内容协商模式：http://localhost:8080/test/person?format=json、http://localhost:8080/test/person?format=xml
+
+
+#  servlet:
+#    multipart:
+#      max-file-size: 10MB     # 单个文件上传的大小
+#      max-request-size: 100MB # 请求所有文件上传的总大小
+
+
+server:
+  port: 8081
