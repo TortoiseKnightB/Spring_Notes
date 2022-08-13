@@ -15,6 +15,7 @@ public class MyConfig {
     @Bean
     public HelloService helloService() {
         HelloService helloService = new HelloService();
+        helloService.setFlag("我是手动新自定义的HelloService：");
         return helloService;
     }
 }

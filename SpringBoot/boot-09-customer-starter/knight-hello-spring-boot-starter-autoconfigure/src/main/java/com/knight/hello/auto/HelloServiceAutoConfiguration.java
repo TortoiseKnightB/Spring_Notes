@@ -19,6 +19,7 @@ public class HelloServiceAutoConfiguration {
     @ConditionalOnMissingBean(HelloService.class)
     public HelloService helloService() {
         HelloService helloService = new HelloService();
+        helloService.setFlag("我是默认自动配置的HelloService：");
         return helloService;
     }
 }

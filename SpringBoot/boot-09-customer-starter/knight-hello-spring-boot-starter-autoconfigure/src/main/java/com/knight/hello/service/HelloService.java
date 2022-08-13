@@ -11,10 +11,16 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 public class HelloService {
 
+    private String flag;
+
     @Autowired
     HelloProperties helloProperties;
 
     public String sayHello(String userName) {
-        return helloProperties.getPrefix() + ": " + userName + ">> " + helloProperties.getSuffix();
+        return flag + helloProperties.getPrefix() + ": " + userName + ">> " + helloProperties.getSuffix();
+    }
+
+    public void setFlag(String flag) {
+        this.flag = flag;
     }
 }
