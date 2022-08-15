@@ -1,2 +1,10 @@
 server:
   port: 8081
+
+# 方式一：通过配置文件设置登录系统的账号、密码
+#spring:
+#  security:
+#    user:
+#      name: knight
+#      password: 123456ben
+
