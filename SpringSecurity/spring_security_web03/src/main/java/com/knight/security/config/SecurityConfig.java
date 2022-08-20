@@ -38,7 +38,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.formLogin()    // 自定义自己编写的登录页面
                 .loginPage("/login.html")  // 登录页面设置
                 .loginProcessingUrl("/user/login")  // 登录访问路径
-                .defaultSuccessUrl("/test/index").permitAll();   // 登录成功之后跳转路径
+                .defaultSuccessUrl("/success.html") // 登录成功之后跳转路径
+                .permitAll();
 
         http.authorizeRequests()
                 .antMatchers("/", "/test/hello", "/user/login").permitAll()    // 设置哪些路径可以直接访问，不需要认证
@@ -52,6 +53,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.exceptionHandling().accessDeniedPage("/unauth.html");   // 如果用户没有权限访问，自动跳转该页面
 
-
+        http.logout()
+                .logoutUrl("/logout")   // 退出地址
+                .logoutSuccessUrl("/test/hello")    // 退出后跳转的路径
+                .permitAll();
     }
 }
